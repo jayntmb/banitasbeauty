@@ -1,0 +1,14 @@
+.btnErrors {
+    // background: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 35px;
+
+    &--iconBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
