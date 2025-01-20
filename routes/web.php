@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\EngagementController;
 use App\Http\Controllers\NewsletterController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Admin\CommandeClientController;
 use App\Http\Controllers\Admin\ChatController as AdminChatController;
 use App\Http\Controllers\Admin\ClientController as AdminClientController;
 use App\Http\Controllers\Admin\ProduitController as AdminProduitController;
+use App\Models\Wishlist;
 
 // Home and Static Pages
 Route::get('/', [AccueilController::class, 'index'])->name('home');
@@ -94,9 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/panier/update-quantity', [PanierController::class, 'updateQuantity'])->name('panier.updateQuantity');
 
     // Favorites
-    Route::get('/favoris', function () {
-        return view('favoris.favoris');
-    })->name('favorites');
+    Route::get('/favoris',[WishlistController::class, 'getUserWishlist'])->name('favorites');
+    Route::post('/favoris/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/favoris/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
 // Identification

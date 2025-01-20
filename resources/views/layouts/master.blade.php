@@ -394,6 +394,119 @@
             });
         });
     </script>
+    <script>
+        function removeFromWishlist(wish_id) {
+            event.preventDefault()
+            var urlWishlistDestroy = "{{ route('wishlist.remove', ':wishlistId') }}".replace(':wishlistId', wish_id)
+
+            Swal.fire({
+                title: 'Wishlist',
+                text: 'Etes-vous sûr de vouloir supprimer ce produit de votre liste de souhaits?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, je suis sûr',
+                cancelButtonText: 'Non, annuler',
+                customClass: {
+                    popup: 'bg-gray-200 dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg', // Classes Tailwind pour le popup
+                    confirmButton: 'bg-[#e38407] hover:bg-[#e38407] text-white font-bold py-2 px-4 rounded', // Bouton de confirmation
+                    cancelButton: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' // Bouton d'annulation
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: urlWishlistDestroy,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log(
+                                'Wishlist deleted successfully');
+                            Swal.fire({
+                                title: 'Succès!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                customClass: {
+                                    popup: 'bg-gray-200 dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg', // Classes Tailwind pour le popup
+                                    confirmButton: 'bg-[#e38407] hover:bg-[#e38407] text-white font-bold py-2 px-4 rounded', // Bouton de confirmation
+                                    cancelButton: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' // Bouton d'annulation
+                                },
+                            }).then(() => {
+                                location.reload()
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error deleting the product:',
+                                error);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function addToWishList(event, productId) {
+            event.preventDefault();
+            let isAuthenticated = @auth true
+        @else
+            false
+        @endauth ;
+        if (isAuthenticated) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('wishlist.add') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    productId: productId
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.count) {
+                        $('.wishcount').text(response.count)
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: response.success
+                        });
+                    }
+
+                    if (response.exists) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: response.exists
+                        });
+                    }
+                }
+            });
+        } else {
+            window.location.href = "{{ route('login') }}"
+        }
+        }
+    </script>
     @yield('scripts')
 </body>
 
