@@ -17,8 +17,7 @@ class DatabaseSeeder extends Seeder
             StatutSeeder::class,
             RoleSeeder::class,
             CategorySeeder::class,
-            ProductSeeder::class,
-            PanierSeeder::class,
+            ProductSeeder::class
         ]);
     }
 }
