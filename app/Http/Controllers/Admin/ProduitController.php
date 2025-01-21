@@ -24,6 +24,19 @@ class ProduitController extends Controller
         return view('admin.pages.produits', compact('produits', 'categories', 'article', 'devis'));
     }
 
+    public function search(Request $request)
+    {
+        $produits = Produit::where('nom', 'LIKE', '%' . $request->get('value') . '%')
+            ->latest()
+            ->get();
+        $categories = Categorie::where('statut_id', '1')->get();
+
+        $html = view('admin.partials.product-search-results', compact('produits', 'categories'))->render();
+
+        // Return the view with the generated HTML
+        return response()->json(['html' => $html]);
+    }
+
     public function store(Request $request)
     {
         try {

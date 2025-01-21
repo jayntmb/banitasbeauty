@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::post('tableau-de-bord/partenaires/logo/editer', [PartenaireController::class, 'updatelogo'])->name('admin.partenaires.logo.update');
         Route::get('tableau-de-bord/partenaires/supprimer/{id}', [PartenaireController::class, 'deletelogo'])->name('admin.partenaires.logo.delete');
 
+        Route::get('/search', [ProduitController::class, 'search'])->name('products.search');
         // Route::get('tableau-de-bord/devis/jour', [PartenaireController::class, 'jourdevis'])->name('admin.devis.jour');
         // Route::get('tableau-de-bord/devis/mois', [PartenaireController::class, 'moisdevis'])->name('admin.devis.mois');
         // Route::get('tableau-de-bord/devis/annee', [PartenaireController::class, 'annedevis'])->name('admin.devis.annee');
