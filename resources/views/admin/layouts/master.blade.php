@@ -209,6 +209,54 @@
     @stack('scripts')
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = $('.search-input');
+            const initialContent = $('.initialProductsContainer').html();
+
+            $('.search-input').on('keyup', function() {
+                const value = $(this).val().trim();
+
+                if (value === '') {
+                    $('.initialProductsContainer').html(initialContent);
+                } else {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('products.search') }}",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            value: value
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            const html = response.html;
+
+                            if (html.trim() === '') {
+                                $('.initialProductsContainer').html(`
+                                    <div class="p-4 my-4 flex flex-col gap-6 text-center justify-center w-full text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300" role="alert">
+                                        <div class="">
+                                            <span class="font-medium">Oups désolé !</span> Aucun produit correspondant à votre recherche n'est disponible pour le moment.
+                                        </div>
+                                        <div class="">
+                                            <a href="{{ route('admin.produits') }}" class="px-6 py-2 btn btn-dark hover:text-white hover:bg-[#e38407] font-semibold rounded-md text-center transition-all duration-300 whitespace-nowrap align-middle touch-manipulation shadow-md">Afficher tous les produits.</a>
+                                        </div>
+                                    </div>
+                                `);
+                            } else {
+                                $('.initialProductsContainer').html(`
+                                    ${html}
+                                `);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching products:", error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
         $('#page-load').addClass('d-none');
         var objDiv = document.querySelector(".content-chat");
         //  objDiv.scrollTo(0,objDiv.scrollHeight)

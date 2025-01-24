@@ -6,8 +6,8 @@
                     <div class="card-body p-2 p-sm-3">
                         <div class="row g-3">
                             <div class="col-lg-8 d-flex align-items-center justify-content-end">
-                                <input required type="text" class="form-control form-control-sm form-control-bg"
-                                    placeholder="Recherche" wire:model.live='search'>
+                                <input type="text" class="search-input form-control form-control-sm form-control-bg"
+                                    placeholder="Recherche">
                                 <div class="dropdown">
                                     <button
                                         class="btn btn-option btn-fliter d-flex align-items-center justify-content-end"
@@ -41,7 +41,7 @@
                                 <h4>Tous les produits</h4>
                             </div>
                             <div class="col-lg-12">
-                                <div class="row g-3">
+                                <div class="row g-3 initialProductsContainer">
                                     @if ($produits->count() == 0)
                                         <div class="row-12 content-center">
                                             <h3 class="text-center mb-4"> Aucun produit pour cette catégorie</h3>
