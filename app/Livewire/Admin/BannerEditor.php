@@ -19,6 +19,7 @@ class BannerEditor extends Component
     public $buttonLink;
     public $image;
     public $newImage;
+    public $imagePreview;
 
     public $showModal = false; // Contrôle l'affichage de la modale
 
@@ -55,7 +56,20 @@ class BannerEditor extends Component
             'description' => 'required|string',
             'buttonText' => 'required|string|max:255',
             'buttonLink' => 'required|string|max:255',
-            'newImage' => 'nullable|image|max:2048', // 2MB max
+            'newImage' => 'nullable|image|mimes:png,gif,bmp,svg,jpg,jpeg,webp|max:2048', // 2MB max
+        ], [
+            'titleLine1.required' => 'Le titre (ligne 1) est obligatoire.',
+            'titleLine1.max' => 'Le titre (ligne 1) ne doit pas dépasser 255 caractères.',
+            'titleLine2.required' => 'Le titre (ligne 2) est obligatoire.',
+            'titleLine2.max' => 'Le titre (ligne 2) ne doit pas dépasser 255 caractères.',
+            'description.required' => 'La description est obligatoire.',
+            'buttonText.required' => 'Le texte du bouton est obligatoire.',
+            'buttonText.max' => 'Le texte du bouton ne doit pas dépasser 255 caractères.',
+            'buttonLink.required' => 'Le lien du bouton est obligatoire.',
+            'buttonLink.max' => 'Le lien du bouton ne doit pas dépasser 255 caractères.',
+            'newImage.image' => 'Le fichier doit être une image.',
+            'newImage.mimes' => 'Les formats autorisés sont : PNG, GIF, BMP, SVG, JPG, JPEG, WEBP.',
+            'newImage.max' => 'La taille maximale de l\'image est de 2 Mo.',
         ]);
 
         // Mettre à jour la bannière
@@ -67,6 +81,31 @@ class BannerEditor extends Component
         $banner->button_link = $this->buttonLink;
 
         if ($this->newImage) {
+            $allowedExtensions = [
+                'png',
+                'gif',
+                'bmp',
+                'svg',
+                'wav',
+                'mp4',
+                'mov',
+                'avi',
+                'wmv',
+                'mp3',
+                'm4a',
+                'jpg',
+                'jpeg',
+                'mpga',
+                'webp',
+                'wma',
+            ];
+            $fileExtension = $this->newImage->getClientOriginalExtension();
+
+            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                // Si l'extension n'est pas autorisée, afficher une erreur
+                $this->addError('newImage', 'Les formats autorisés sont : PNG, GIF, BMP, SVG, JPG, JPEG, WEBP.');
+                return;
+            }
             // Générer un nom de fichier unique
             $fileName = $this->newImage->getClientOriginalName();
 
