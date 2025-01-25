@@ -11,7 +11,7 @@
         }
     </style>
 
-    @include('partials.accueil.banner')
+    @livewire('banner-display')
     @include('partials.accueil.move-bundle')
     @include('partials.accueil.block-intro')
     @include('partials.accueil.block-promo-lg')

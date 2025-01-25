@@ -35,6 +35,7 @@
             background-color: red;
         }
     </style>
+    @livewireStyles
 </head>
 
 <body>
@@ -507,6 +508,7 @@
         }
         }
     </script>
+    @livewireScripts
     @yield('scripts')
 </body>
 

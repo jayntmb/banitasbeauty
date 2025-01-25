@@ -50,7 +50,7 @@
                                             <div class="price">
                                                 {{ $produit->prix }}$
                                             </div>
-                                            <a href="{{ route('panier.store', ['id' => $popularProduct->id, 'quantite' => 1]) }}"
+                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
                                                 class="btn btn-primary btn-default ms-auto disabled opacity-0">
                                                 Ajouter au panier
                                             </a>
@@ -76,7 +76,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center ">
-                                            <a href="{{ route('panier.store', ['id' => $popularProduct->id, 'quantite' => 1]) }}"
+                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
                                                 class="btn btn-primary btn-default">
                                                 Ajouter au panier
                                             </a>
