@@ -12,7 +12,7 @@
     </style>
 
     @livewire('banner-display')
-    @include('partials.accueil.move-bundle')
+    @livewire('move-bundle-display')
     @include('partials.accueil.block-intro')
     @include('partials.accueil.block-promo-lg')
     @include('partials.accueil.block-article-slide')

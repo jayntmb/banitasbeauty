@@ -17,12 +17,15 @@
             </div>
         </div>
     </div>
-    <div class="content mt-4">
+    <div class="content">
         <div class="container-fluid">
             <div class="row">
                 <!-- Carte pour la bannière -->
                 <div class="col-md-4 mb-4">
                     @livewire('admin.banner-editor')
+                </div>
+                <div class="col-md-4 mb-4">
+                    @livewire('admin.move-bundle-editor')
                 </div>
             </div>
         </div>
