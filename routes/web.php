@@ -2,10 +2,8 @@
 
 use App\Models\Produit;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TagController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\DevisController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\AccueilController;
@@ -17,14 +15,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\EngagementController;
 use App\Http\Controllers\NewsletterController;
-use App\Http\Controllers\Admin\ImageController;
-use App\Http\Controllers\Admin\CategorieController;
-use App\Http\Controllers\Admin\PartenaireController;
-use App\Http\Controllers\Admin\CommandeClientController;
-use App\Http\Controllers\Admin\ChatController as AdminChatController;
-use App\Http\Controllers\Admin\ClientController as AdminClientController;
-use App\Http\Controllers\Admin\ProduitController as AdminProduitController;
-use App\Models\Wishlist;
+
 
 Route::middleware('userOnline')->group(function () {
     // Home and Static Pages
