@@ -13,7 +13,7 @@
 
     @livewire('banner-display')
     @livewire('move-bundle-display')
-    @include('partials.accueil.block-intro')
+    @livewire('block-intro-display')
     @include('partials.accueil.block-promo-lg')
     @include('partials.accueil.block-article-slide')
     @include('partials.accueil.block-black')

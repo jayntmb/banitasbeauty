@@ -24,8 +24,13 @@
                 <div class="col-md-4 mb-4">
                     @livewire('admin.banner-editor')
                 </div>
+                <!-- Carte pour la bande defilante -->
                 <div class="col-md-4 mb-4">
                     @livewire('admin.move-bundle-editor')
+                </div>
+                <!-- Carte pour le texte d'introduction -->
+                <div class="col-md-4 mb-4">
+                    @livewire('admin.block-intro-editor')
                 </div>
             </div>
         </div>
