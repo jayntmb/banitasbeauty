@@ -3,7 +3,7 @@
     <a href="#" wire:click.prevent="openModal" class="card-link text-decoration-none">
         <div class="card h-100 shadow-lg">
             <div class="card-body text-center">
-                <i class="fas fa-edit fa-3x mb-3 text-primary"></i>
+                <i class="fas fa-image fa-3x mb-3 text-primary"></i>
                 <h5 class="card-title">Bloc Intro</h5>
                 <p class="card-text text-dark">
                     <i class="fas fa-edit"></i> Modifier le contenu du bloc intro.

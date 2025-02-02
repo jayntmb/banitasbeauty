@@ -14,8 +14,8 @@
     @livewire('banner-display')
     @livewire('move-bundle-display')
     @livewire('block-intro-display')
-    @include('partials.accueil.block-promo-lg')
-    @include('partials.accueil.block-article-slide')
-    @include('partials.accueil.block-black')
+    @livewire('block-promo-display')
+    @livewire('block-article-slide-display')
+    @livewire('block-black-display')
     @include('partials.accueil.newsletter')
 @endsection

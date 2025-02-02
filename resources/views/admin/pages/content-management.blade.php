@@ -32,6 +32,18 @@
                 <div class="col-md-4 mb-4">
                     @livewire('admin.block-intro-editor')
                 </div>
+                <!-- Carte pour le produit mis en avant -->
+                <div class="col-md-4 mb-4">
+                    @livewire('admin.block-promo-editor')
+                </div>
+                <!-- Carte pour les produit mis en promo -->
+                <div class="col-md-4 mb-4">
+                    @livewire('admin.block-article-slide-editor')
+                </div>
+                <!-- Carte pour le block black -->
+                <div class="col-md-4 mb-4">
+                    @livewire('admin.block-black-editor')
+                </div>
             </div>
         </div>
     </div>
