@@ -154,6 +154,8 @@
             });
         </script>
     @endif
+
+    <!-- Script pour la recherche des produits -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = $('.search-input');
@@ -192,7 +194,7 @@
                                             <span class="tooltip-indicator sm">Ajouter aux favoris</span>
                                         </a>
                                         <a href="/produit/${produit.id}">
-                                            <img src="${produit.image}" alt="${produit.nom}">
+                                            <img src="assets/images/produits/${produit.first_image}" alt="${produit.nom}">
                                         </a>
                                     </div>
                                     <div class="content-text mt-2 mt-lg-2">
@@ -232,6 +234,8 @@
             });
         });
     </script>
+
+    <!-- Script pour la mise a jour du panier de l'utilisateur -->
     <script>
         loadCart();
 
@@ -308,6 +312,8 @@
             document.querySelector('.indice span').textContent = `${cartCount}`;
         }
     </script>
+
+
     <script>
         document.body.addEventListener('click', function(event) {
             const Toast = Swal.mixin({
@@ -384,6 +390,8 @@
             }
         });
     </script>
+
+    <!-- Script pour le changement de style lors du scroll -->
     <script>
         $(document).ready(function() {
             $(this).scroll(function() {
@@ -395,6 +403,8 @@
             });
         });
     </script>
+
+    <!-- Script pour la suppression d'un produit de la wishlist -->
     <script>
         function removeFromWishlist(wish_id) {
             event.preventDefault()
@@ -448,6 +458,7 @@
         }
     </script>
 
+    <!-- Fonction js pour l'ajout d'un produit a la wishlist -->
     <script>
         function addToWishList(event, productId) {
             event.preventDefault();
