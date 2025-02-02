@@ -14,7 +14,7 @@
                 <div class="content-text h-100 d-flex flex-column">
                     <div class="my-auto">
                         <a href="{{ route('produit.show', $block_promo_display->produit_id) }}">
-                            <h2 class="text-lg mb-lg-4 mb-3">
+                            <h2 class="text-lg mb-lg-4 mb-3 fw-bold" style="font-family: 'Courier New', Courier, monospace">
                                 {{ $block_promo_display->product_name }}
                             </h2>
                         </a>

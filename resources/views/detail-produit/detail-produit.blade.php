@@ -107,7 +107,7 @@
                         </h1>
                         <div class="row g-lg-4 g-3">
                             <div class="col-lg-8">
-                                <div class="name-product">
+                                <div class="name-product fw-bold" style="font-family: monospace">
                                     {{ $produit->nom }}
                                 </div>
                                 <div class="price">
