@@ -41,7 +41,7 @@
             <li>
                 <a href="{{ route('admin.gestion.images') }}"
                     class="{{ request()->is('gestion-image') ? 'active' : '' }} link"><i class="fas fa-image"></i>
-                    <span class="title">Gestion des Images</span></a>
+                    <span class="title">Gestion de contenu</span></a>
             </li>
             <li>
                 <a href="{{ route('profils.edit') }}"

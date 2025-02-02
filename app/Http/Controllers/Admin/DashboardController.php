@@ -2,37 +2,36 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\CommandeClient;
-use App\Models\DevisClient;
-use App\Models\Produit;
-use App\Models\Categorie;
-use App\Models\Client;
-use App\Models\Societe;
-use App\Models\Partenaire;
-use App\Models\Newsletter;
-use App\Models\Devis;
-use App\Models\Chat;
-use App\Models\Commande;
-use App\Http\Controllers\Controller;
-use App\Models\Message;
-use App\Models\SiteInfo;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Rainwater\Active\ActiveFacade;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Session;
+use App\Models\Chat;
+use App\Models\User;
+use App\Models\Devis;
+use App\Models\Client;
+use App\Models\Message;
+use App\Models\Produit;
+use App\Models\Societe;
+use App\Models\Commande;
+use App\Models\SiteInfo;
+use App\Models\Categorie;
+use App\Models\Newsletter;
+use App\Models\Partenaire;
+use App\Models\DevisClient;
+use Illuminate\Http\Request;
+use App\Models\CommandeClient;
 use Illuminate\Support\Facades\DB;
+use Rainwater\Active\ActiveFacade;
 use Webklex\PHPIMAP\ClientManager;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         // Calcul des utilisateurs en ligne
-        $online = User::whereHas('sessions', function ($query) {
-            $query->whereNotNull('user_id');
-        })->count();
-
+        $online = $this->countOnlineUsers()['online'];
+        $offline = $this->countOnlineUsers()['offline'];
         // Calcul des utilisateurs totaux et connectés
         $totalUsers = User::count();
 
@@ -53,6 +52,7 @@ class DashboardController extends Controller
             'user',
             'totalUsers',
             'online',
+            'offline',
             'clients',
             'partenaires',
             'societes',
@@ -61,6 +61,24 @@ class DashboardController extends Controller
             'chats',
             'devis'
         ));
+    }
+
+    function countOnlineUsers()
+    {
+        $onlineUsersCount = 0;
+        $offlineUsersCount = 0;
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            if (Cache::has('user-is-online-' . $user->id)) {
+                $onlineUsersCount++;
+            } else {
+                $offlineUsersCount++;
+            }
+        }
+
+        return ['online' => $onlineUsersCount, 'offline' => $offlineUsersCount];
     }
 
     public function email()

@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ChatController;
-use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ProduitController;
 use App\Http\Controllers\Admin\CategorieController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PartenaireController;
 use App\Http\Controllers\Admin\CommandeClientController;
+use App\Http\Controllers\ContentController;
 
 Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::post('tableau-de-bord/partenaires/logo/editer', [PartenaireController::class, 'updatelogo'])->name('admin.partenaires.logo.update');
         Route::get('tableau-de-bord/partenaires/supprimer/{id}', [PartenaireController::class, 'deletelogo'])->name('admin.partenaires.logo.delete');
 
+        Route::get('/search', [ProduitController::class, 'search'])->name('products.search');
         // Route::get('tableau-de-bord/devis/jour', [PartenaireController::class, 'jourdevis'])->name('admin.devis.jour');
         // Route::get('tableau-de-bord/devis/mois', [PartenaireController::class, 'moisdevis'])->name('admin.devis.mois');
         // Route::get('tableau-de-bord/devis/annee', [PartenaireController::class, 'annedevis'])->name('admin.devis.annee');
@@ -111,10 +112,9 @@ Route::middleware('auth')->group(function () {
                 return view('admin.pages.tags');
             }
         )->name('admin.tags');
-        Route::controller(ImageController::class)->group(
+        Route::controller(ContentController::class)->group(
             function () {
-                Route::get('gestion-image', 'index')->name('admin.gestion.images');
-                Route::post('gestion-image/store', 'store')->name('admin.images.store');
+                Route::get('gestion-contenu', action: 'index')->name('admin.gestion.images');
             }
         );
     });

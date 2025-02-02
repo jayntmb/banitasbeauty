@@ -4,6 +4,7 @@ use App\Http\Middleware\isAuth;
 use App\Http\Middleware\isUser;
 use App\Http\Middleware\isAdmin;
 use App\Http\Middleware\isActive;
+use App\Http\Middleware\UserOnline;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin' => isAdmin::class,
+            'userOnline' => UserOnline::class,
             'isActive' => isActive::class,
             'verified' => EnsureEmailIsVerified::class,
         ]);

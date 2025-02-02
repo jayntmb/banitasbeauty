@@ -171,6 +171,7 @@
                                             </div>
                                         </div>
                                         <div class="circle-white">
+                                            {{ $offline }}
                                             <span>Non connectés</span>
                                         </div>
                                     </div>
