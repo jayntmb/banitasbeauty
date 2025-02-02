@@ -68,14 +68,7 @@
                                     <span class="text-danger fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <!-- Lien du bouton -->
-                            <div class="mb-3">
-                                <label for="buttonLink" class="form-label">Lien du bouton</label>
-                                <input type="text" readonly id="buttonLink" wire:model="buttonLink"
-                                    class="form-control">
-                            </div>
-
+                            
                             <!-- Image -->
                             <div class="mb-3">
                                 <label for="newImage" class="form-label">Image</label>

@@ -55,7 +55,6 @@ class BannerEditor extends Component
             'titleLine2' => 'required|string|max:255',
             'description' => 'required|string',
             'buttonText' => 'required|string|max:255',
-            'buttonLink' => 'required|string|max:255',
             'newImage' => 'nullable|image|mimes:png,gif,bmp,svg,jpg,jpeg,webp|max:2048', // 2MB max
         ], [
             'titleLine1.required' => 'Le titre (ligne 1) est obligatoire.',
@@ -65,8 +64,6 @@ class BannerEditor extends Component
             'description.required' => 'La description est obligatoire.',
             'buttonText.required' => 'Le texte du bouton est obligatoire.',
             'buttonText.max' => 'Le texte du bouton ne doit pas dépasser 255 caractères.',
-            'buttonLink.required' => 'Le lien du bouton est obligatoire.',
-            'buttonLink.max' => 'Le lien du bouton ne doit pas dépasser 255 caractères.',
             'newImage.image' => 'Le fichier doit être une image.',
             'newImage.mimes' => 'Les formats autorisés sont : PNG, GIF, BMP, SVG, JPG, JPEG, WEBP.',
             'newImage.max' => 'La taille maximale de l\'image est de 2 Mo.',
@@ -78,7 +75,7 @@ class BannerEditor extends Component
         $banner->title_line2 = $this->titleLine2;
         $banner->description = $this->description;
         $banner->button_text = $this->buttonText;
-        $banner->button_link = $this->buttonLink;
+        $banner->button_link = "/boutique";
 
         if ($this->newImage) {
             $allowedExtensions = [

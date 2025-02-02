@@ -19,7 +19,6 @@ class BannerDisplay extends Component
     #[On('bannerUpdated')]
     public function refreshBanner()
     {
-        Log::info('Événement bannerUpdated reçu dans BannerDisplay');
         // Recharger les données de la bannière
         $this->banner = Banner::first();
     }
