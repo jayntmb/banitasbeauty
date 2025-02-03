@@ -126,11 +126,6 @@ class BlockPromoEditor extends Component
 
     public function render()
     {
-        $blockpromo = BlockPromo::first();
-        $this->produit_id = $blockpromo->id;
-        $this->product_name = $blockpromo->product_name;
-        $this->description = $blockpromo->description;
-        
         return view('livewire.admin.block-promo-editor');
     }
 }
