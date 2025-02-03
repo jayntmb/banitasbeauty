@@ -139,20 +139,9 @@ $showNavPage = true;
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="d-flex align-items-center gap-lg-2 gap-3">
-                                <div class="d-flex block-rate align-items-center gap-2">
-                                    <i class="bi bi-star-fill active lg"></i>
-                                    <i class="bi bi-star-fill active lg"></i>
-                                    <i class="bi bi-star-fill active lg"></i>
-                                    <i class="bi bi-star-fill lg"></i>
-                                    <i class="bi bi-star-fill lg"></i>
-                                </div>
-                                <div class="label">
-                                    150 Avis
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Evaluation des produits -->
+                        @livewire('product-rating', ['productId' => $produit->id])
+
                         <div class="col-12">
                             <p class="paragraph sm mb-0">
                                 Taxes incluses. Frais d'expédition calculés à l'étape de paiement.

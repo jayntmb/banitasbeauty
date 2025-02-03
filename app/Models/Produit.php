@@ -23,16 +23,8 @@ class Produit extends Model
         return $this->belongsTo(Categorie::class);
     }
 
-    public function lot() {
-        return $this->belongsTo(Lot::class);
-    }
-
     public function paniers() {
         return $this->hasMany(Panier::class);
-    }
-
-    public function pivotProduitTags() {
-        return $this->hasMany(PivotProduitTag::class);
     }
 
     public function pivotProduitUsers() {
@@ -43,4 +35,13 @@ class Produit extends Model
         return $this->hasMany(Commande::class);
     }
 
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }
