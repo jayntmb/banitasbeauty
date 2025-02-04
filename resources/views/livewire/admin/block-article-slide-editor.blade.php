@@ -48,12 +48,15 @@
                     <div class="modal-body">
                         <div class="d-flex gap-4">
                             <div class="d-flex gap-1">
-                                <label for="promo" class="btn btn-primary text-white">Les prduits en promotion</label>
-                                <input type="checkbox" hidden name="" wire:change="displayFormPromo" id="promo">
+                                <label for="promo" class="btn btn-primary text-white">Les prduits en
+                                    promotion</label>
+                                <input type="checkbox" hidden name="" wire:change="displayFormPromo"
+                                    id="promo">
                             </div>
                             <div class="d-flex gap-1">
                                 <label for="arrivage" class="btn btn-dark text-light">Les arrivages</label>
-                                <input type="checkbox" name="" hidden wire:change="displayFormArrivage" id="arrivage">
+                                <input type="checkbox" name="" hidden wire:change="displayFormArrivage"
+                                    id="arrivage">
                             </div>
                         </div>
 
@@ -63,8 +66,8 @@
                                 <!-- product_name -->
                                 <div class="form-group my-2">
                                     <label for="searchProduct">Ajouter un produit</label>
-                                    <input type="text" id="searchProduct" wire:model.live="searchTerm" class="form-control"
-                                        placeholder="Saisissez le nom du produit...">
+                                    <input type="text" id="searchProduct" wire:model.live="searchTerm"
+                                        class="form-control" placeholder="Saisissez le nom du produit...">
 
                                     @if (!empty($searchResults))
                                         <ul class="list-group mt-2 z-3 bg-white rounded-md text-dark">
@@ -88,58 +91,107 @@
                                             <div class="image-container">
                                                 <button type="button" class="close-button" aria-label="Close"
                                                     wire:click="removeProduct('{{ $product_name }}', 'fromPromo')">&times;</button>
-                                                <img src="{{ asset('assets/images/produits/' . $image) }}" alt="Image actuelle" class="img-fluid mt-2"
+                                                <img src="{{ asset('assets/images/produits/' . $image) }}"
+                                                    alt="Image actuelle" class="img-fluid mt-2"
                                                     style="width: 250px; height: 260px;"><br>
                                                 <span>{{ $product_name }}</span>
                                             </div>
                                         @endforeach
                                     </div>
                                 @endif
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg" wire:loading.attr="disabled">
+                                        <span>
+                                            <i class="fas fa-save me-2"></i> Enregistrer
+                                        </span>
+                                        <span wire:loading>
+                                            <i class="fas fa-spinner fa-spin me-2"></i>
+                                        </span>
+                                    </button>
+                                </div>
                             @endif
-
+                        </form>
+                        <form wire:submit.prevent="addArrivage">
                             <!-- For arrivage -->
                             @if ($forArrivage)
                                 <!-- product_name -->
                                 <div class="form-group my-2">
-                                    <label for="searchProduct">Marquer un produit comne arrivage</label>
-                                    <input type="text" id="searchProduct" wire:model.live="searchTerm" class="form-control"
-                                        placeholder="Rechercher un produit...">
-
-                                    @if (!empty($searchResults))
-                                        <ul class="list-group mt-2 z-3 bg-white rounded-md text-dark">
-                                            @foreach ($searchResults as $product)
-                                                <li class="list-group-item cursor-pointer list-group-item-action text-dark"
-                                                    wire:click="selectArrivageProduct({{ $product->id }})">
-                                                    {{ $product->nom }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-
-                                    @error('product_name')
+                                    <label for="nom_arrivage">Nom du produit</label>
+                                    <input type="text" id="nom_arrivage" wire:model.live="nom_arrivage"
+                                        class="form-control" placeholder="Saisissez le nom du produit..." required>
+                                    @error('nom_arrivage')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                @if ($arrivageImages)
+                                <div class="form-group my-2">
+                                    <label for="category" class="mb-2">Catégorie</label>
+                                    <select name="categorie_id" id="category"
+                                        class="form-control select-form form-control-sm" required>
+                                        <option selected value="" disabled> Cliquez pour choisir... </option>
+
+                                        @foreach ($categories as $categorie)
+                                            <option value="{{ $categorie->id }}">{{ $categorie->libelle }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- description -->
+                                <div class="form-group my-2">
+                                    <label for="description_arrivage">Description du produit</label>
+                                    <textarea id="description_arrivage" wire:model="description_arrivage" placeholder="Decrivez le produit"
+                                        class="form-control" rows="4"></textarea>
+                                    @error('description_arrivage')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <!-- Prix -->
+                                <div class="form-group my-2">
+                                    <label for="prix_arrivage">Prix du produit</label>
+                                    <input type="number" id="prix_arrivage" wire:model.live="prix_arrivage"
+                                        class="form-control" placeholder="Combien coute le produit ?" required>
+                                    @error('prix_arrivage')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group my-2">
+                                    <label for="" class="mb-2">Images</label>
+                                    <div class="input-group">
+                                        <input type="file" id="images_arrivages" wire:model="images_arrivages"
+                                            class="form-control">
+                                        @error('images_arrivages')
+                                            <span class="text-danger fs-6">{{ $message }}</span>
+                                        @enderror
+                                        <div class="input-group-text" wire:loading wire:target="images_arrivages">
+                                            <i class="fas fa-spinner fa-spin"></i> Uploading...
+                                        </div>
+                                    </div>
+                                    @error('images_arrivages')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                    @error('images_arrivages.*')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                @if ($addedArrivages)
                                     <div class="mb-4 d-flex justify-content-center flex-wrap gap-3">
-                                        @foreach (array_unique($arrivageImages) as $arrivage_name => $image)
+                                        @foreach (array_unique($addedArrivages) as $arrivage_name => $image)
                                             <!-- Aperçu des images -->
                                             <div class="image-container">
                                                 <button type="button" class="close-button" aria-label="Close"
                                                     wire:click="removeProduct('{{ $arrivage_name }}', 'fromArrivage')">&times;</button>
-                                                <img src="{{ asset('assets/images/produits/' . $image) }}" alt="Image actuelle" class="img-fluid mt-2"
+                                                <img src="{{ asset('assets/images/produits/' . $image) }}"
+                                                    alt="Image actuelle" class="img-fluid mt-2"
                                                     style="width: 250px; height: 260px;"><br>
                                                 <span>{{ $arrivage_name }}</span>
                                             </div>
                                         @endforeach
                                     </div>
                                 @endif
-                            @endif
 
-                            <!-- Bouton de soumission -->
-                            @if ($forPromo || $forArrivage)
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary btn-lg" wire:loading.attr="disabled">
+                                    <button type="submit" class="btn btn-primary btn-lg"
+                                        wire:loading.attr="disabled">
                                         <span>
                                             <i class="fas fa-save me-2"></i> Enregistrer
                                         </span>
