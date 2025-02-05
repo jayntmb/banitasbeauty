@@ -29,8 +29,8 @@ class CategorieController extends Controller
         ]);
 
         if ($request->has('image')) {
-            $fileName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('/assets/images/categories/'), $fileName);
+            $fileName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('storage/images/categories/'), $fileName);
             $categorie->update([
                 'image' => $fileName,
             ]);
@@ -61,11 +61,11 @@ class CategorieController extends Controller
         ]);
 
         if ($request->file('image') != null) {
-            $fileName = $request->file('image')->getClientOriginalName();
-            if (File::exists(public_path('assets/images/categories/' . $categorie->image))) {
-                File::delete(public_path('assets/images/categories/' . $categorie->image));
+            $fileName = time() . '_' . $request->file('image')->getClientOriginalName();
+            if (File::exists(public_path('storage/images/categories/' . $categorie->image))) {
+                File::delete(public_path('storage/images/categories/' . $categorie->image));
             }
-            $request->file('image')->move(public_path('assets/images/categories/'), $fileName);
+            $request->file('image')->move(public_path('storage/images/categories/'), $fileName);
 
             $categorie->update([
                 'image' => $fileName,

@@ -71,7 +71,7 @@
 
                                                 <!-- Image du produit -->
                                                 <div class="block-img-prod">
-                                                    <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                                    <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                         alt="{{ $produit->nom }}">
                                                 </div>
 
@@ -82,8 +82,7 @@
                                                     @if ($produit->is_promo && $produit->promo_type === 'pourcentage' && $produit->promo_value)
                                                         <!-- Prix avec pourcentage -->
                                                         @php
-                                                            $promoPrice =
-                                                                $produit->prix * (1 - $produit->promo_value / 100);
+        $promoPrice = $produit->prix * (1 - $produit->promo_value / 100);
                                                         @endphp
                                                         <div class="prices">
                                                             <span
@@ -183,7 +182,7 @@
                                     <div class="message-sm row">
                                         <div class="col-lg-10 d-flex col-8">
                                             <div class="avatar-user">
-                                                <img src="{{ asset('assets/images/categories/' . $categorie->image) }}"
+                                                <img src="{{ asset('storage/images/categories/' . $categorie->image) }}"
                                                     alt="">
                                             </div>
                                             <div class="content-message-sm w-100">
@@ -285,7 +284,7 @@
                                                     @if ($produit->first_image)
                                                         <div class="carousel-item active">
                                                             <div class="block-img-edit">
-                                                                <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                                                <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                                     alt="Image 1">
                                                             </div>
                                                         </div>
@@ -293,7 +292,7 @@
                                                     @if ($produit->second_image)
                                                         <div class="carousel-item">
                                                             <div class="block-img-edit">
-                                                                <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                                                <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                                                     alt="Image 2">
                                                             </div>
                                                         </div>
@@ -301,7 +300,7 @@
                                                     @if ($produit->third_image)
                                                         <div class="carousel-item">
                                                             <div class="block-img-edit">
-                                                                <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                                                <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                                                     alt="Image 3">
                                                             </div>
                                                         </div>
@@ -356,6 +355,53 @@
                                                 <option value="3"> En attente </option>
                                             </select>
                                         </div>
+                                        <div class="col-lg-12">
+                                                <div class="col-12">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input checkBoxPromo" type="checkbox" {{ $produit->is_promo ? 'checked' : '' }}
+                                                            name="is_promo" id="checkBoxPromo{{ $produit->id }}">
+                                                        <label class="form-check-label" for="checkBoxPromo{{ $produit->id }}">
+                                                            C'est une promotion
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="promoDetails" id="promoDetails{{ $produit->id }}" style="display: none;">
+                                                    <h5 class="mt-2 fs-6">Détails de la promotion</h5>
+                                                    <div class="mb-3">
+                                                        <label for="promoType{{ $produit->id }}" class="form-label">Type de promotion</label>
+                                                        <select class="form-control select-form form-control-sm" id="promoType{{ $produit->id }}" name="promo_type">
+                                                            <option selected value="" disabled> Cliquez pour choisir...</option>
+                                                            <option value="pourcentage" {{ $produit->promo_type === "pourcentage" ? 'selected' : '' }}>Pourcentage
+                                                            </option>
+                                                            <option value="fixe" {{ $produit->promo_type === "fixe" ? 'selected' : '' }}>Prix fixe</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="promoValue{{ $produit->id }}" class="form-label">Valeur de la promotion</label>
+                                                        <input type="number" value="{{ $produit->promo_value }}" class="form-control" id="promoValue{{ $produit->id }}"
+                                                            name="promo_value" min="0" placeholder="Entrez une valeur">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="startDate{{ $produit->id }}" class="form-label">Date et heure de début</label>
+                                                        <input type="datetime-local" value="{{ $produit->promo_start_date }}" class="form-control"
+                                                            id="startDate{{ $produit->id }}" name="promo_start_date">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="endDate{{ $produit->id }}" class="form-label">Date et heure de fin</label>
+                                                        <input type="datetime-local" value="{{ $produit->promo_end_date }}" class="form-control"
+                                                            id="endDate{{ $produit->id }}" name="promo_end_date">
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" name="is_arrivage" {{ $produit->is_arrivage ? 'checked' : '' }} id="checkboxArrivage{{$produit->id}}">
+                                                <label class="form-check-label" for="checkboxArrivage{{$produit->id}}">
+                                                    C'est un arrivage
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end">
@@ -385,7 +431,7 @@
                                     @if ($produit->first_image)
                                         <div class="carousel-item active">
                                             <div class="block-img-produit">
-                                                <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                                <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                     alt="Image 1">
                                             </div>
                                         </div>
@@ -393,7 +439,7 @@
                                     @if ($produit->second_image)
                                         <div class="carousel-item">
                                             <div class="block-img-produit">
-                                                <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                                <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                                     alt="Image 2">
                                             </div>
                                         </div>
@@ -401,7 +447,7 @@
                                     @if ($produit->third_image)
                                         <div class="carousel-item">
                                             <div class="block-img-produit">
-                                                <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                                <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                                     alt="Image 3">
                                             </div>
                                         </div>
@@ -413,7 +459,7 @@
                                             data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
                                             data-bs-slide-to="0" class="active" aria-current="true"
                                             aria-label="Slide 1">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                 alt="Thumbnail 1">
                                         </button>
                                     @endif
@@ -421,7 +467,7 @@
                                         <button type="button"
                                             data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
                                             data-bs-slide-to="1" aria-label="Slide 2">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                                 alt="Thumbnail 2">
                                         </button>
                                     @endif
@@ -429,7 +475,7 @@
                                         <button type="button"
                                             data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
                                             data-bs-slide-to="2" aria-label="Slide 3">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                                 alt="Thumbnail 3">
                                         </button>
                                     @endif
@@ -477,7 +523,7 @@
                             aria-labelledby="video-tab" tabindex="0">
                             <div class="block-info-user">
                                 @if ($produit->video)
-                                    <video src="{{ asset('assets/images/produits/video/' . $produit->video) }}"
+                                    <video src="{{ asset('storage/images/produits/video/' . $produit->video) }}"
                                         controls></video>
                                 @else
                                     <p>Aucune vidéo pour ce Produit</p>
@@ -544,7 +590,7 @@
                                 <div class="col-12">
                                     <label for="" class="mb-2">Images</label>
                                     <img class="rounded mx-auto d-block" style="width: 100px; height:100px;"
-                                        src="{{ asset('assets/images/categories/' . $categorie->image) }}" />
+                                        src="{{ asset('storage/images/categories/' . $categorie->image) }}" />
                                     <div class="block-file">
                                         <label for="file-upload-ct-{{ $categorie->id }}">
                                             <input name="image" type="file"
