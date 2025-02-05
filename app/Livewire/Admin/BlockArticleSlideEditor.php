@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Categorie;
 use App\Models\Produit;
 use Livewire\Component;
+use App\Models\Categorie;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Log;
 
 class BlockArticleSlideEditor extends Component
 {
@@ -30,8 +31,8 @@ class BlockArticleSlideEditor extends Component
     public $prix_arrivage;
     public $images_arrivages = [];
 
-    public $categories ;
-    public $categorie_id;
+    public $categories;
+    public $categorie;
 
     public function openModal()
     {
@@ -84,18 +85,6 @@ class BlockArticleSlideEditor extends Component
             }
         }
 
-        if (!empty($this->selectedArrivageProducts)) {
-            foreach (array_unique($this->selectedArrivageProducts) as $value) {
-                $produit = Produit::find($value);
-                if ($produit) {
-                    $produit->update([
-                        'is_arrivage' => true
-                    ]);
-                    $produit->save();
-                }
-            }
-        }
-
         // Fermer la modale
         $this->closeModal();
     }
@@ -106,6 +95,7 @@ class BlockArticleSlideEditor extends Component
         $this->validate([
             'nom_arrivage' => 'required|string|max:255',
             'description_arrivage' => 'required|string',
+            'categorie' => 'required|exists:categories,id',
             'prix_arrivage' => 'required|numeric|min:0',
             'images_arrivages' => 'required', // Au moins une image est requise
             'images_arrivages.*' => 'image|max:2048', // Chaque image doit être valide et ne pas dépasser 2 Mo
@@ -113,6 +103,7 @@ class BlockArticleSlideEditor extends Component
             'nom_arrivage.required' => 'Le nom de l\'arrivage est requis.',
             'nom_arrivage.string' => 'Le nom de l\'arrivage doit être une chaîne de caractères.',
             'nom_arrivage.max' => 'Le nom de l\'arrivage ne doit pas dépasser 255 caractères.',
+            'categorie.required' => 'La catégorie est requise.',
             'description_arrivage.required' => 'La description de l\'arrivage est requise.',
             'description_arrivage.string' => 'La description de l\'arrivage doit être une chaîne de caractères.',
             'prix_arrivage.required' => 'Le prix de l\'arrivage est requis.',
@@ -128,16 +119,18 @@ class BlockArticleSlideEditor extends Component
         // Sauvegarder le produit
         $product = Produit::create([
             'nom' => $this->nom_arrivage,
-            'categorie_id' => $this->categorie_id,
+            'categorie_id' => $this->categorie,
             'description' => $this->description_arrivage,
             'prix' => $this->prix_arrivage,
+            'statut_id' => 1,
+            'is_arrivage' => true,
         ]);
 
         // Sauvegarder les images_arrivages
         if ($this->images_arrivages) {
             foreach ($this->images_arrivages as $index => $image) {
-                $imageName = $image->getClientOriginalName();
-                $image->storeAs('public/assets/images/produits', $imageName);
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->storeAs('/images/produits', $imageName);
 
                 // Determine the image column based on the index (0 for first_image, 1 for second_image, 2 for third_image)
                 switch ($index) {
@@ -158,8 +151,7 @@ class BlockArticleSlideEditor extends Component
 
 
         // Réinitialiser les champs du formulaire
-        // $this->reset(['nom_arrivage', 'description_arrivage', 'prix_arrivage', 'images']);
-        $this->closeModal();
+        $this->reset(['nom_arrivage', 'description_arrivage', 'prix_arrivage', 'categorie', 'images_arrivages']);
     }
 
     public function removeProduct($name, $source)

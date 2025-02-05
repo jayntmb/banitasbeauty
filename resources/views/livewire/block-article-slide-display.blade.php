@@ -31,7 +31,7 @@
                                         <span class="tooltip-indicator sm">Ajouter aux favoris</span>
                                     </a>
                                     <a href="{{ route('produit.show', $produit->id) }}">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                             alt="{{ $produit->nom }}">
                                     </a>
                                 </div>

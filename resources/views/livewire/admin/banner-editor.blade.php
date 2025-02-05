@@ -35,19 +35,10 @@
                         <form wire:submit.prevent="updateBanner" enctype="multipart/form-data">
                             <!-- Titre (Ligne 1) -->
                             <div class="form-group my-2">
-                                <label for="titleLine1">Titre (Ligne 1)</label>
-                                <input type="text" id="titleLine1" wire:model="titleLine1" class="form-control">
-                                @error('titleLine1')
+                                <label for="title">Titre</label>
+                                <input type="text" id="title" wire:model="title" class="form-control">
+                                @error('title')
                                     <span class="text-danger fs-6 text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Titre (Ligne 2) -->
-                            <div class="form-group my-2">
-                                <label for="titleLine2">Titre (Ligne 2)</label>
-                                <input type="text" id="titleLine2" wire:model="titleLine2" class="form-control">
-                                @error('titleLine2')
-                                    <span class="text-danger fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -60,15 +51,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Texte du bouton -->
-                            <div class="form-group my-2">
-                                <label for="buttonText">Texte du bouton</label>
-                                <input type="text" id="buttonText" wire:model="buttonText" class="form-control">
-                                @error('buttonText')
-                                    <span class="text-danger fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            
                             <!-- Image -->
                             <div class="mb-3">
                                 <label for="newImage" class="form-label">Image</label>
@@ -91,7 +73,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @elseif ($image)
                                     <!-- Aperçu de l'image actuelle -->
-                                    <img src="{{ asset('storage/' . $image) }}" alt="Image actuelle"
+                                    <img src="{{ asset('storage/images/banners/' . $image) }}" alt="Image actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @endif
                             </div>
@@ -106,6 +88,7 @@
                                         <i class="fas fa-spinner fa-spin me-2"></i>
                                     </span>
                                 </button>
+                                <button class="btn btn-secondary" wire:click="closeModal">Annuler</button>
                             </div>
                         </form>
                     </div>

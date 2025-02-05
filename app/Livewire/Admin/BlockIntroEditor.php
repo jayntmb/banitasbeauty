@@ -98,11 +98,11 @@ class BlockIntroEditor extends Component
 
         // Gérer les fichiers
         $this->handleFileUpload($blockIntro, 'image1', 'newImage1', 'images/block-intro');
-        $this->handleFileUpload($blockIntro, 'video1', 'newVideo1', 'videos/block-intro');
+        $this->handleFileUpload($blockIntro, 'video1', 'newVideo1', 'images/block-intro/videos');
         $this->handleFileUpload($blockIntro, 'image2', 'newImage2', 'images/block-intro');
-        $this->handleFileUpload($blockIntro, 'video2', 'newVideo2', 'videos/block-intro');
+        $this->handleFileUpload($blockIntro, 'video2', 'newVideo2', 'images/block-intro/videos');
         $this->handleFileUpload($blockIntro, 'image3', 'newImage3', 'images/block-intro');
-        $this->handleFileUpload($blockIntro, 'video3', 'newVideo3', 'videos/block-intro');
+        $this->handleFileUpload($blockIntro, 'video3', 'newVideo3', 'images/block-intro/videos');
 
         // Enregistrer les modifications
         $blockIntro->save();
@@ -122,8 +122,11 @@ class BlockIntroEditor extends Component
                 Storage::disk('public')->delete($blockIntro->$field);
             }
 
+            $originalFilename = $this->$newFile->getClientOriginalName();
+            $timestampedFilename = time() . '_' . $originalFilename;
+
             // Stocker le nouveau fichier
-            $path = $this->$newFile->store($folder, 'public');
+            $path = $this->$newFile->storeAs($folder, $timestampedFilename, 'public');
             $blockIntro->$field = $path;
         }
     }

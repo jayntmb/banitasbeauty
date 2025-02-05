@@ -13,18 +13,9 @@ class BlockPromoDisplay extends Component
     public $product_name;
     public $description;
 
-    public function mount()
-    {
-        $this->refreshBlockPromo();
-    }
-
-    public function refreshBlockPromo()
-    {
-        $this->block_promo_display = BlockPromo::first();
-    }
-
     public function render()
     {
+        $this->block_promo_display = BlockPromo::first();
         return view('livewire.block-promo-display');
     }
 }

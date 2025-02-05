@@ -117,9 +117,9 @@ class ProduitController extends Controller
             $images = $request->file('images');
 
             foreach ($images as $index => $image) {
-                $imageName = $image->getClientOriginalName();
+                $imageName = time() . '_' . $image->getClientOriginalName();
                 // Move the image to the public folder
-                $image->move(public_path('/assets/images/produits/'), $imageName);
+                $image->move(public_path('images/produits/'), $imageName);
 
                 // Determine the image column based on the index (0 for first_image, 1 for second_image, 2 for third_image)
                 switch ($index) {
@@ -139,7 +139,7 @@ class ProduitController extends Controller
         if ($request->hasFile('video')) {
             $videoName = $request->file('video')->getClientOriginalName();
             $produit->update(['video' => $videoName]);
-            $request->file('video')->move(public_path('/assets/images/produits/video/'), $videoName);
+            $request->file('video')->move(public_path('images/produits/video/'), $videoName);
         }
     }
 
@@ -149,32 +149,32 @@ class ProduitController extends Controller
             $images = $request->file('images');
 
             foreach ($images as $index => $image) {
-                $imageName = $image->getClientOriginalName();
+                $imageName = time() . '_' . $image->getClientOriginalName();
 
                 // Supprimer l'ancienne image si elle existe
                 switch ($index) {
                     case 0:
-                        if ($produit->first_image && file_exists(public_path('/assets/images/produits/' . $produit->first_image))) {
-                            unlink(public_path('/assets/images/produits/' . $produit->first_image));
+                        if ($produit->first_image && file_exists(public_path('images/produits/' . $produit->first_image))) {
+                            unlink(public_path('images/produits/' . $produit->first_image));
                         }
                         $produit->update(['first_image' => $imageName]);
                         break;
                     case 1:
-                        if ($produit->second_image && file_exists(public_path('/assets/images/produits/' . $produit->second_image))) {
-                            unlink(public_path('/assets/images/produits/' . $produit->second_image));
+                        if ($produit->second_image && file_exists(public_path('images/produits/' . $produit->second_image))) {
+                            unlink(public_path('images/produits/' . $produit->second_image));
                         }
                         $produit->update(['second_image' => $imageName]);
                         break;
                     case 2:
-                        if ($produit->third_image && file_exists(public_path('/assets/images/produits/' . $produit->third_image))) {
-                            unlink(public_path('/assets/images/produits/' . $produit->third_image));
+                        if ($produit->third_image && file_exists(public_path('images/produits/' . $produit->third_image))) {
+                            unlink(public_path('images/produits/' . $produit->third_image));
                         }
                         $produit->update(['third_image' => $imageName]);
                         break;
                 }
 
                 // Déplacer le nouveau fichier
-                $image->move(public_path('/assets/images/produits/'), $imageName);
+                $image->move(public_path('images/produits/'), $imageName);
             }
         }
     }

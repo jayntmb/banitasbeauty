@@ -4,9 +4,9 @@
         <div class="card h-100 shadow-lg">
             <div class="card-body text-center">
                 <i class="fas fa-image fa-3x text-green"></i>
-                <h5 class="card-title">Bande passante</h5>
+                <h5 class="card-title">Bande defilante</h5>
                 <p class="card-text text-dark">
-                    <i class="fas fa-edit"></i> Modifier le contenu de la bande passante.
+                    <i class="fas fa-edit"></i> Modifier le contenu de la bande defilante.
                 </p>
             </div>
         </div>
@@ -19,7 +19,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-green text-white">
-                        <h5 class="modal-title">Modifier la bande passante</h5>
+                        <h5 class="modal-title">Modifier la bande defilante</h5>
                         <button type="button" class="btn-close btn-close-white" wire:click="closeModal"></button>
                     </div>
                     <div class="modal-body">
@@ -40,6 +40,7 @@
                                         <i class="fas fa-spinner fa-spin me-2"></i> Enregistrement...
                                     </span>
                                 </button>
+                                <button class="btn btn-secondary" wire:click="closeModal">Annuler</button>
                             </div>
                         </form>
                     </div>
