@@ -119,7 +119,7 @@ class ProduitController extends Controller
             foreach ($images as $index => $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 // Move the image to the public folder
-                $image->move(public_path('images/produits/'), $imageName);
+                $image->move(public_path('storage/images/produits/'), $imageName);
 
                 // Determine the image column based on the index (0 for first_image, 1 for second_image, 2 for third_image)
                 switch ($index) {
@@ -137,9 +137,9 @@ class ProduitController extends Controller
         }
 
         if ($request->hasFile('video')) {
-            $videoName = $request->file('video')->getClientOriginalName();
+            $videoName = time() . '_' . $request->file('video')->getClientOriginalName();
             $produit->update(['video' => $videoName]);
-            $request->file('video')->move(public_path('images/produits/video/'), $videoName);
+            $request->file('video')->move(public_path('storage/images/produits/video/'), $videoName);
         }
     }
 
@@ -154,28 +154,34 @@ class ProduitController extends Controller
                 // Supprimer l'ancienne image si elle existe
                 switch ($index) {
                     case 0:
-                        if ($produit->first_image && file_exists(public_path('images/produits/' . $produit->first_image))) {
-                            unlink(public_path('images/produits/' . $produit->first_image));
+                        if ($produit->first_image && file_exists(public_path('storage/images/produits/' . $produit->first_image))) {
+                            unlink(public_path('storage/images/produits/' . $produit->first_image));
                         }
                         $produit->update(['first_image' => $imageName]);
                         break;
                     case 1:
-                        if ($produit->second_image && file_exists(public_path('images/produits/' . $produit->second_image))) {
-                            unlink(public_path('images/produits/' . $produit->second_image));
+                        if ($produit->second_image && file_exists(public_path('storage/images/produits/' . $produit->second_image))) {
+                            unlink(public_path('storage/images/produits/' . $produit->second_image));
                         }
                         $produit->update(['second_image' => $imageName]);
                         break;
                     case 2:
-                        if ($produit->third_image && file_exists(public_path('images/produits/' . $produit->third_image))) {
-                            unlink(public_path('images/produits/' . $produit->third_image));
+                        if ($produit->third_image && file_exists(public_path('storage/images/produits/' . $produit->third_image))) {
+                            unlink(public_path('storage/images/produits/' . $produit->third_image));
                         }
                         $produit->update(['third_image' => $imageName]);
                         break;
                 }
 
                 // Déplacer le nouveau fichier
-                $image->move(public_path('images/produits/'), $imageName);
+                $image->move(public_path('storage/images/produits/'), $imageName);
             }
+        }
+
+        if ($request->hasFile('video')) {
+            $videoName = time() . '_' . $request->file('video')->getClientOriginalName();
+            $produit->update(['video' => $videoName]);
+            $request->file('video')->move(public_path('storage/images/produits/video/'), $videoName);
         }
     }
 
@@ -217,12 +223,21 @@ class ProduitController extends Controller
                 'images.*.max' => 'Les images du produit ne doivent pas dépasser 4 Mo',
             ]);
 
+            $is_promo = $request->is_promo ? true : false;
+            $is_arrivage = $request->is_arrivage ? true : false;
+
             $produitData = [
                 'nom' => $validatedData['nom'],
                 'prix' => $validatedData['prix'],
                 'description' => $validatedData['description'] ?? $produit->description,
                 'categorie_id' => $validatedData['categorie_id'],
                 'statut_id' => $validatedData['statut_id'],
+                'is_promo' => $is_promo,
+                'is_arrivage' => $is_arrivage,
+                'promo_type' => $request->promo_type ?? null,
+                'promo_value' => $request->promo_value ?? 0,
+                'promo_start_date' => $request->promo_start_date ?? null,
+                'promo_end_date' => $request->promo_end_date ?? null,
             ];
 
             $produit->update($produitData);
