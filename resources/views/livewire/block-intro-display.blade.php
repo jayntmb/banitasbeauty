@@ -5,23 +5,23 @@
                 <h3 class="text-center">
                     {{ $phrase1 }}
                     <div class="avatar">
-                        <img src="{{ asset('storage/' . $image1) }}" alt="Produits de maquillage premium Banitas">
+                        <img src="{{ asset('storage/images/block-intro/' . $image1) }}" alt="Produits de maquillage premium Banitas">
                         <div class="video">
-                            <video src="{{ asset('storage/' . $video1) }}" autoplay muted playisline loop></video>
+                            <video src="{{ asset('storage/images/block-intro/videos/' . $video1) }}" autoplay muted playisline loop></video>
                         </div>
                     </div>
                     {{ $phrase2 }}
                     <div class="avatar">
-                        <img src="{{ asset('storage/' . $image2) }}" alt="Soins visage naturels et efficaces">
+                        <img src="{{ asset('storage/images/block-intro/' . $image2) }}" alt="Soins visage naturels et efficaces">
                         <div class="video">
-                            <video src="{{ asset('storage/' . $video2) }}" autoplay muted playisline loop></video>
+                            <video src="{{ asset('storage/images/block-intro/videos/' . $video2) }}" autoplay muted playisline loop></video>
                         </div>
                     </div>
                     {{ $phrase3 }}
                     <div class="avatar">
-                        <img src="{{ asset('storage/' . $image3) }}" alt="Résultats beauté prouvés">
+                        <img src="{{ asset('storage/images/block-intro/' . $image3) }}" alt="Résultats beauté prouvés">
                         <div class="video">
-                            <video src="{{ asset('storage/' . $video3) }}" autoplay muted playisline loop></video>
+                            <video src="{{ asset('storage/images/block-intro/videos/' . $video3) }}" autoplay muted playisline loop></video>
                         </div>
                     </div>
                     {{ $phrase4 }}

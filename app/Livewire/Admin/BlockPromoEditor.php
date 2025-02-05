@@ -4,52 +4,36 @@ namespace App\Livewire\Admin;
 
 use App\Models\Produit;
 use Livewire\Component;
+use App\Models\Categorie;
 use App\Models\BlockPromo;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class BlockPromoEditor extends Component
 {
     use WithFileUploads;
 
-    public $searchTerm = '';
+    public $showModal = false;
+    public $isNewProduct = true;
+
+    // Propriétés pour un nouveau produit
+    public $newProductName;
+    public $newProductDescription;
+    public $newProductPrice;
+    public $newProductCategory;
+    public $newProductImages = [];
+
+    // Propriétés pour un produit existant
+    public $searchQuery;
     public $searchResults = [];
 
-
-    public $produit_id;
-    public $product_name;
-    public $description;
-    public $image;
-    public $newImage;
-    public $imagePreview;
-
-    public $showModal = false; // Contrôle l'affichage de la modale
-
-    public function updatedSearchTerm()
-    {
-        $this->searchResults = Produit::where('nom', 'like', '%' . $this->searchTerm . '%')->limit(5)->get();
-    }
-
-    public function selectProduct($productId)
-    {
-        $product = Produit::findOrFail($productId);
-        $this->produit_id = $productId;
-        $this->product_name = $product->nom;
-        $this->description = $product->description;
-        $this->image = $product->first_image;
-        $this->searchResults = [];
-    }
-
-    public function mount()
-    {
-        // Récupérer les données de la bannière
-        $block_promo = BlockPromo::first();
-        if ($block_promo) {
-            $this->product_name = $block_promo->product_name;
-            $this->description = $block_promo->description;
-            $this->image = $block_promo->image;
-        }
-    }
-
+    public $selectedProduct = [
+        'id' => null,
+        'nom' => '',
+        'prix' => '',
+        'description' => '',
+        'first_image' => '',
+    ];
     public function openModal()
     {
         $this->showModal = true;
@@ -60,72 +44,114 @@ class BlockPromoEditor extends Component
         $this->showModal = false;
     }
 
-    public function updateBlockPromo()
+    public function updatedSearchQuery()
     {
-        // Valider les données
+        $this->searchResults = Produit::where('nom', 'like', '%' . $this->searchQuery . '%')->get();
+    }
+
+    public function selectProduct($productId)
+    {
+        $product = Produit::find($productId);
+        if ($product) {
+
+            $sourceFile = public_path("storage/images/produits/" . $product->first_image);
+            $destinationPath = "images/block_promo/";
+
+            Storage::disk('public')->putFileAs($destinationPath, $sourceFile, $product->first_image);
+
+            $this->selectedProduct = [
+                'id' => $product->id,
+                'nom' => $product->nom,
+                'prix' => $product->prix,
+                'description' => $product->description,
+                'first_image' => $product->first_image,
+            ];
+        }
+        $this->searchResults = [];
+        $this->searchQuery = '';
+    }
+
+    public function addNewProduct()
+    {
         $this->validate([
-            'product_name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'newImage' => 'nullable|image|mimes:png,gif,bmp,svg,jpg,jpeg,webp|max:2048', // 2MB max
-        ], [
-            'product_name.required' => 'Le titre (ligne 1) est obligatoire.',
-            'description.required' => 'La description est obligatoire.',
-            'newImage.image' => 'Le fichier doit être une image.',
-            'newImage.mimes' => 'Les formats autorisés sont : PNG, GIF, BMP, SVG, JPG, JPEG, WEBP.',
-            'newImage.max' => 'La taille maximale de l\'image est de 2 Mo.',
+            'newProductName' => 'required|string|max:255',
+            'newProductDescription' => 'required|string',
+            'newProductPrice' => 'required|numeric',
+            'newProductCategory' => 'required|exists:categories,id',
+            'newProductImages.*' => 'image|mimes:png,gif,bmp,svg,jpg,jpeg,webp|max:2048',
         ]);
 
-        // Mettre à jour la bannière
-        $block_promo = BlockPromo::firstOrNew();
-        $block_promo->produit_id = $this->produit_id;
-        $block_promo->product_name = $this->product_name;
-        $block_promo->description = $this->description;
+        // Générer un nom de fichier unique pour chaque image
+        $firstImageName = $this->newProductImages[0] ? time() . '_' . $this->newProductImages[0]->getClientOriginalName() : null;
+        $secondImageName = isset($this->newProductImages[1]) ? time() . '_' . $this->newProductImages[1]->getClientOriginalName() : null;
+        $thirdImageName = isset($this->newProductImages[2]) ? time() . '_' . $this->newProductImages[2]->getClientOriginalName() : null;
 
-        if ($this->newImage) {
-            $allowedExtensions = [
-                'png',
-                'gif',
-                'bmp',
-                'svg',
-                'wav',
-                'mp4',
-                'mov',
-                'avi',
-                'wmv',
-                'mp3',
-                'm4a',
-                'jpg',
-                'jpeg',
-                'mpga',
-                'webp',
-                'wma',
-            ];
-            $fileExtension = $this->newImage->getClientOriginalExtension();
-
-            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
-                // Si l'extension n'est pas autorisée, afficher une erreur
-                $this->addError('newImage', 'Les formats autorisés sont : PNG, GIF, BMP, SVG, JPG, JPEG, WEBP.');
-                return;
-            }
-            // Générer un nom de fichier unique
-            $fileName = $this->newImage->getClientOriginalName();
-
-            $this->newImage->storeAs('images/block_promo', $fileName, 'public');
-
-            // Mettre à jour le chemin de l'image dans la base de données
-            $block_promo->image = 'images/block_promo/' . $fileName;
-        } else {
-            $block_promo->image = $this->image;
+        // Stocker les images dans le dossier public/storage/images/produits
+        if ($this->newProductImages[0]) {
+            $this->newProductImages[0]->storeAs('images/produits', $firstImageName, 'public');
+            $this->newProductImages[0]->storeAs('images/block_promo', $firstImageName, 'public');
+        }
+        if (isset($this->newProductImages[1])) {
+            $this->newProductImages[1]->storeAs('images/produits', $secondImageName, 'public');
+        }
+        if (isset($this->newProductImages[2])) {
+            $this->newProductImages[2]->storeAs('images/produits', $thirdImageName, 'public');
         }
 
-        $block_promo->save();
+        // Créer le produit dans la base de données
+        $product = Produit::create([
+            'nom' => $this->newProductName,
+            'description' => $this->newProductDescription,
+            'prix' => $this->newProductPrice,
+            'categorie_id' => $this->newProductCategory,
+            'first_image' => $firstImageName,
+            'second_image' => $secondImageName,
+            'third_image' => $thirdImageName,
+            'statut_id' => 1,
+        ]);
+        $this->selectedProduct['nom'] = $product->nom;
+        $this->selectedProduct['description'] = $product->description;
+        $this->selectedProduct['prix'] = $product->prix;
+        $this->selectedProduct['first_image'] = $product->first_image;
 
-        // Fermer la modale
+        $this->updateBlockPromo($product->id);
+
         $this->closeModal();
+    }
+
+    public function selectExistingProduct()
+    {
+        $this->validate([
+            'selectedProduct.id' => 'required|exists:produits,id',
+        ]);
+
+        $this->updateBlockPromo($this->selectedProduct['id']);
+
+        $this->closeModal();
+    }
+
+    private function updateBlockPromo($productId)
+    {
+        $blockPromo = BlockPromo::firstOrNew();
+        $blockPromo->produit_id = $productId;
+        $blockPromo->product_name = $this->selectedProduct['nom'];
+        $blockPromo->description = $this->selectedProduct['description'];
+        $blockPromo->prix = $this->selectedProduct['prix'];
+        $blockPromo->image = $this->selectedProduct['first_image'];
+        $blockPromo->save();
     }
 
     public function render()
     {
-        return view('livewire.admin.block-promo-editor');
+        $existingBlockPromo = BlockPromo::first();
+        if ($existingBlockPromo) {
+            $this->selectedProduct['nom'] = $existingBlockPromo->product_name;
+            $this->selectedProduct['description'] = $existingBlockPromo->description;
+            $this->selectedProduct['prix'] = $existingBlockPromo->prix;
+            $this->selectedProduct['first_image'] = $existingBlockPromo->image;
+        }
+        return view('livewire.admin.block-promo-editor', [
+            'categories' => Categorie::all(),
+        ]);
     }
 }

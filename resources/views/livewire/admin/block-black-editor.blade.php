@@ -47,6 +47,7 @@
                                         <i class="fas fa-spinner fa-spin me-2"></i> Enregistrement...
                                     </span>
                                 </button>
+                                <button class="btn btn-secondary" wire:click="closeModal">Annuler</button>
                             </div>
                         </form>
                     </div>

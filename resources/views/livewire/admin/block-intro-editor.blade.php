@@ -4,9 +4,9 @@
         <div class="card h-100 shadow-lg">
             <div class="card-body text-center">
                 <i class="fas fa-image fa-3x mb-3 text-primary"></i>
-                <h5 class="card-title">Bloc Intro</h5>
+                <h5 class="card-title">Paragraphe d'accueil</h5>
                 <p class="card-text text-dark">
-                    <i class="fas fa-edit"></i> Modifier le contenu du bloc intro.
+                    <i class="fas fa-edit"></i> Modifier le texte et les images de la deuxieme section.
                 </p>
             </div>
         </div>
@@ -19,7 +19,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-green text-white">
-                        <h5 class="modal-title">Modifier le bloc intro</h5>
+                        <h5 class="modal-title">Modifier le paragraphe d'accueil</h5>
                         <button type="button" class="btn-close btn-close-white" wire:click="closeModal"></button>
                     </div>
                     <div class="modal-body">
@@ -79,7 +79,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @elseif ($image1)
                                     <!-- Aperçu de l'image actuelle -->
-                                    <img src="{{ asset('storage/' . $image1) }}" alt="Image actuelle"
+                                    <img src="{{ asset('storage/images/block-intro/' . $image1) }}" alt="Image actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @endif
                             </div>
@@ -106,7 +106,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @elseif ($video1)
                                     <!-- Aperçu de la video actuelle -->
-                                    <video src="{{ asset('storage/' . $video1) }}" alt="video actuelle"
+                                    <video src="{{ asset('storage/images/block-intro/videos/' . $video1) }}" alt="video actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @endif
                             </div>
@@ -133,7 +133,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @elseif ($image2)
                                     <!-- Aperçu de l'image actuelle -->
-                                    <img src="{{ asset('storage/' . $image2) }}" alt="Image actuelle"
+                                    <img src="{{ asset('storage/images/block-intro/' . $image2) }}" alt="Image actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @endif
                             </div>
@@ -161,7 +161,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @elseif ($video2)
                                     <!-- Aperçu de la video actuelle -->
-                                    <video src="{{ asset('storage/' . $video2) }}" alt="Video actuelle"
+                                    <video src="{{ asset('storage/images/block-intro/videos/' . $video2) }}" alt="Video actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @endif
                             </div>
@@ -189,7 +189,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @elseif ($image3)
                                     <!-- Aperçu de l'image actuelle -->
-                                    <img src="{{ asset('storage/' . $image3) }}" alt="Image actuelle"
+                                    <img src="{{ asset('storage/images/block-intro/' . $image3) }}" alt="Image actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;">
                                 @endif
                             </div>
@@ -217,7 +217,7 @@
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @elseif ($video3)
                                     <!-- Aperçu de la video actuelle -->
-                                    <video src="{{ asset('storage/' . $video3) }}" alt="Video actuelle"
+                                    <video src="{{ asset('storage/images/block-intro/videos/' . $video3) }}" alt="Video actuelle"
                                         class="img-fluid mt-2" style="max-width: 200px;" autoplay muted playisline loop></video>
                                 @endif
                             </div>
@@ -232,6 +232,7 @@
                                         <i class="fas fa-spinner fa-spin me-2"></i>
                                     </span>
                                 </button>
+                                <button class="btn btn-secondary" wire:click="closeModal">Annuler</button>
                             </div>
                         </form>
                     </div>
