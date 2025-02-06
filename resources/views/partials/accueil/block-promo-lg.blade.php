@@ -9,8 +9,8 @@
                     <div class="bundel">
                         Les nouveautés
                     </div>
-                    <img src="{{ asset('assets/images/produits/' . $popularProduct->first_image) }}" alt="image de promotion"
-                        class="w-100 h-100 object-fit-cover">
+                    <img src="{{ asset('storage/images/produits/' . $popularProduct->first_image) }}"
+                        alt="image de promotion" class="w-100 h-100 object-fit-cover">
                 </div>
             </div>
             <div class="col-lg-6">
