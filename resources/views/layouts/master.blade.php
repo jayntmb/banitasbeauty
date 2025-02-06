@@ -194,7 +194,7 @@
                                             <span class="tooltip-indicator sm">Ajouter aux favoris</span>
                                         </a>
                                         <a href="/produit/${produit.id}">
-                                            <img src="assets/images/produits/${produit.first_image}" alt="${produit.nom}">
+                                            <img src="storage/images/produits/${produit.first_image}" alt="${produit.nom}">
                                         </a>
                                     </div>
                                     <div class="content-text mt-2 mt-lg-2">
@@ -270,7 +270,7 @@
                     <div class="row g-2 g-lg-3">
                         <div class="col-3">
                             <div class="img-article">
-                                <img src="assets/images/produits/${item.produit.first_image}" class="w-100" alt="${item.produit.nom}">
+                                <img src="storage/images/produits/${item.produit.first_image}" class="w-100" alt="${item.produit.nom}">
                             </div>
                         </div>
                         <div class="col-9">
