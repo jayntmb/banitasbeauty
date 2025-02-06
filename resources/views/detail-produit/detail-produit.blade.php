@@ -1,5 +1,5 @@
 @php
-$showNavPage = true;
+    $showNavPage = true;
 @endphp
 
 @extends('layouts.master')
@@ -16,7 +16,7 @@ $showNavPage = true;
                                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
                                     class="active" aria-current="true" aria-label="Slide 1">
                                     <div class="img-sm">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </button>
@@ -25,7 +25,7 @@ $showNavPage = true;
                                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
                                     aria-label="Slide 2">
                                     <div class="img-sm">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </button>
@@ -34,7 +34,7 @@ $showNavPage = true;
                                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
                                     aria-label="Slide 3">
                                     <div class="img-sm">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </button>
@@ -53,7 +53,7 @@ $showNavPage = true;
                             @if ($produit->first_image)
                                 <div class="carousel-item active">
                                     <div class="img-article">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </div>
@@ -61,7 +61,7 @@ $showNavPage = true;
                             @if ($produit->second_image)
                                 <div class="carousel-item">
                                     <div class="img-article">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@ $showNavPage = true;
                             @if ($produit->third_image)
                                 <div class="carousel-item">
                                     <div class="img-article">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                             class="w-100" alt="{{ $produit->nom }}">
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@ $showNavPage = true;
                                 <div class="carousel-item">
                                     <div class="img-article">
                                         <video class="w-100" controls>
-                                            <source src="{{ asset('assets/images/produits/video/' . $produit->video) }}"
+                                            <source src="{{ asset('storage/images/produits/video/' . $produit->video) }}"
                                                 type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
@@ -154,7 +154,8 @@ $showNavPage = true;
                                     <button class="btn btnQte" onclick="updateQuantity(this, -1)">
                                         <i class="bi bi-dash"></i>
                                     </button>
-                                    <input type="text" id="quantityInput" class="form-control" value="1" minlength="1" min="1">
+                                    <input type="text" id="quantityInput" class="form-control" value="1" minlength="1"
+                                        min="1">
                                     <button class="btn btnQte" onclick="updateQuantity(this, 1)">
                                         <i class="bi bi-plus"></i>
                                     </button>
@@ -296,7 +297,7 @@ $showNavPage = true;
                                     <span class="tooltip-indicator sm">Ajouter aux favoris</span>
                                 </a>
                                 <a href="{{ route('produit.show', $produit->id) }}">
-                                    <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                    <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                         alt="{{ $produit->nom }}">
                                 </a>
                             </div>

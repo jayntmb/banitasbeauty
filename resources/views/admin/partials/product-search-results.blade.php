@@ -19,7 +19,7 @@
 
             <!-- Image du produit -->
             <div class="block-img-prod">
-                <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}" alt="{{ $produit->nom }}">
+                <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}" alt="{{ $produit->nom }}">
             </div>
 
             <!-- Nom et prix du produit -->
@@ -27,19 +27,19 @@
                 <h4>{{ $produit->nom }}</h4>
 
                 @if ($produit->is_promo && $produit->promo_type === 'pourcentage' && $produit->promo_value)
-                    <!-- Prix avec pourcentage -->
-                    @php
-                        $promoPrice = $produit->prix * (1 - $produit->promo_value / 100);
-                    @endphp
-                    <div class="prices">
-                        <span class="old-price text-muted text-decoration-line-through">
-                            ${{ number_format($produit->prix, 2, ',', ' ') }}
+                        <!-- Prix avec pourcentage -->
+                        @php
+                            $promoPrice = $produit->prix * (1 - $produit->promo_value / 100);
+                        @endphp
+                        <div class="prices">
+                            <span class="old-price text-muted text-decoration-line-through">
+                                ${{ number_format($produit->prix, 2, ',', ' ') }}
 
-                        </span>
-                        <span class="promo-price text-danger fw-bold">
-                            ${{ number_format($promoPrice, 2, ',', ' ') }}
-                        </span>
-                    </div>
+                            </span>
+                            <span class="promo-price text-danger fw-bold">
+                                ${{ number_format($promoPrice, 2, ',', ' ') }}
+                            </span>
+                        </div>
                 @elseif ($produit->is_promo && $produit->promo_type === 'fixe' && $produit->promo_value)
                     <!-- Prix avec prix fixe -->
                     <div class="prices">
@@ -94,8 +94,7 @@
                                         <select name="categorie_id" id="category"
                                             class="form-control select-form form-control-sm">
                                             @foreach ($categories as $categorie)
-                                                <option value="{{ $categorie->id }}"
-                                                    {{ $produit->categorie?->id === $categorie->id ? 'selected' : '' }}>
+                                                <option value="{{ $categorie->id }}" {{ $produit->categorie?->id === $categorie->id ? 'selected' : '' }}>
                                                     {{ $categorie->libelle }}
                                                 </option>
                                             @endforeach
@@ -117,7 +116,7 @@
                                                 @if ($produit->first_image)
                                                     <div class="carousel-item active">
                                                         <div class="block-img-edit">
-                                                            <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                                            <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                                 alt="Image 1">
                                                         </div>
                                                     </div>
@@ -125,7 +124,7 @@
                                                 @if ($produit->second_image)
                                                     <div class="carousel-item">
                                                         <div class="block-img-edit">
-                                                            <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                                            <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                                                 alt="Image 2">
                                                         </div>
                                                     </div>
@@ -133,7 +132,7 @@
                                                 @if ($produit->third_image)
                                                     <div class="carousel-item">
                                                         <div class="block-img-edit">
-                                                            <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                                            <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                                                 alt="Image 3">
                                                         </div>
                                                     </div>
@@ -141,13 +140,11 @@
                                             </div>
                                             @if ($produit->first_image || $produit->second_image || $produit->third_image)
                                                 <button class="carousel-control-prev btn-carousel" type="button"
-                                                    data-bs-target="#carouselExampleIndicators-{{ $key }}"
-                                                    data-bs-slide="prev">
+                                                    data-bs-target="#carouselExampleIndicators-{{ $key }}" data-bs-slide="prev">
                                                     <i class="fas fa-arrow-left"></i>
                                                 </button>
                                                 <button class="carousel-control-next btn-carousel" type="button"
-                                                    data-bs-target="#carouselExampleIndicators-{{ $key }}"
-                                                    data-bs-slide="next">
+                                                    data-bs-target="#carouselExampleIndicators-{{ $key }}" data-bs-slide="next">
                                                     <i class="fas fa-arrow-right"></i>
                                                 </button>
                                             @endif
@@ -156,9 +153,8 @@
                                         <label for="" class="mb-2">Image</label>
                                         <div class="block-file">
                                             <label for="file-upload-sm-{{ $produit->id }}">
-                                                <input name="images[]" type="file"
-                                                    id="file-upload-sm-{{ $produit->id }}" class="file-input"
-                                                    accept="image/*" multiple>
+                                                <input name="images[]" type="file" id="file-upload-sm-{{ $produit->id }}"
+                                                    class="file-input" accept="image/*" multiple>
                                                 <i class="fas fa-upload"></i>
                                                 <span>Cliquez pour choisir une ou plusieurs images</span>
                                             </label>
@@ -181,7 +177,8 @@
                                         <select name="statut_id" id="statut"
                                             class="form-control select-form form-control-sm">
                                             <option selected value="{{ $produit->statut?->id }}">
-                                                {{ $produit->statut?->libelle }}</option>
+                                                {{ $produit->statut?->libelle }}
+                                            </option>
                                             <option value="1"> Actif </option>
                                             <option value="2"> Inactif </option>
                                             <option value="3"> En attente </option>
@@ -216,7 +213,7 @@
                                 @if ($produit->first_image)
                                     <div class="carousel-item active">
                                         <div class="block-img-produit">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                                 alt="Image 1">
                                         </div>
                                     </div>
@@ -224,7 +221,7 @@
                                 @if ($produit->second_image)
                                     <div class="carousel-item">
                                         <div class="block-img-produit">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                                 alt="Image 2">
                                         </div>
                                     </div>
@@ -232,7 +229,7 @@
                                 @if ($produit->third_image)
                                     <div class="carousel-item">
                                         <div class="block-img-produit">
-                                            <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                            <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                                 alt="Image 3">
                                         </div>
                                     </div>
@@ -240,27 +237,23 @@
                             </div>
                             <div class="carousel-indicators">
                                 @if ($produit->first_image)
-                                    <button type="button"
-                                        data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
-                                        data-bs-slide-to="0" class="active" aria-current="true"
-                                        aria-label="Slide 1">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->first_image) }}"
+                                    <button type="button" data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
+                                        data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1">
+                                        <img src="{{ asset('storage/images/produits/' . $produit->first_image) }}"
                                             alt="Thumbnail 1">
                                     </button>
                                 @endif
                                 @if ($produit->second_image)
-                                    <button type="button"
-                                        data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
+                                    <button type="button" data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
                                         data-bs-slide-to="1" aria-label="Slide 2">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->second_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->second_image) }}"
                                             alt="Thumbnail 2">
                                     </button>
                                 @endif
                                 @if ($produit->third_image)
-                                    <button type="button"
-                                        data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
+                                    <button type="button" data-bs-target="#carouselExampleIndicators-{{ $produit->id }}"
                                         data-bs-slide-to="2" aria-label="Slide 3">
-                                        <img src="{{ asset('assets/images/produits/' . $produit->third_image) }}"
+                                        <img src="{{ asset('storage/images/produits/' . $produit->third_image) }}"
                                             alt="Thumbnail 3">
                                     </button>
                                 @endif
@@ -304,12 +297,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="video-tab-pane-{{ $key }}" role="tabpanel"
-                        aria-labelledby="video-tab" tabindex="0">
+                    <div class="tab-pane fade" id="video-tab-pane-{{ $key }}" role="tabpanel" aria-labelledby="video-tab"
+                        tabindex="0">
                         <div class="block-info-user">
                             @if ($produit->video)
-                                <video src="{{ asset('assets/images/produits/video/' . $produit->video) }}"
-                                    controls></video>
+                                <video src="{{ asset('storage/images/produits/video/' . $produit->video) }}" controls></video>
                             @else
                                 <p>Aucune vidéo pour ce Produit</p>
                             @endif
@@ -327,8 +319,7 @@
     </div>
 
     <!-- Modal pour la suppression d'un produit -->
-    <div class="modal fade" id="delete_produit" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="delete_produit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
