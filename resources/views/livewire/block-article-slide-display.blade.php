@@ -49,14 +49,11 @@
                                                     class="bi bi-star-fill {{ $i <= $averageRating ? 'active' : '' }}"></i>
                                             @endfor
                                         </div>
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center justify-content-between">
                                             <div class="price">
                                                 {{ $produit->prix }}$
                                             </div>
-                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                                class="btn btn-primary btn-default ms-auto disabled opacity-0">
-                                                Ajouter au panier
-                                            </a>
+                                            @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                                         </div>
                                     </div>
                                     <div class="back">
@@ -79,10 +76,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center ">
-                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                                class="btn btn-primary btn-default">
-                                                Ajouter au panier
-                                            </a>
+                                            @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                                             <div class="d-flex block-rate align-items-center gap-2 ms-auto">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <i

@@ -6,171 +6,114 @@ use App\Models\Panier;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PanierController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        // Initialiser les variables
 
-        if ($user) {
-            // Récupérer les paniers de l'utilisateur
-            $mypaniers = Panier::where('user_id', $user->id)
-                ->where('state', '1')
-                ->orderBy('id', 'desc')
-                ->get();
+        $cart = collect(); // Collection vide pour les paniers
+        $cartCount = 0; // Nombre d'articles dans le panier
+        $cart_total_amount = 0; // Quantité totale du panier
 
-            // Compter les paniers actifs et calculer la quantité totale
-            $panierStats = Panier::where('user_id', $user->id)
-                ->where('state', '1')
-                ->selectRaw('COUNT(*) as count, SUM(quantite) as total_quantity')
-                ->first();
+        // Récupérer le panier depuis la session
+        if (session('cart')) {
+            $cart = session('cart');
 
-            // Stocker les statistiques dans la session
-            session()->put('panier_count', $panierStats->count);
-            session()->put('panier_count_total', $panierStats->total_quantity ?? 0);
-        } else {
-            $mypaniers = collect(); // Tableau vide si pas d'utilisateur
-            session()->forget(['panier_count', 'panier_count_total']);
+            // Parcourir les éléments du panier en session
+            foreach ($cart as $produitId => $data) {
+                $prix = $data['details']['prix'] ?? 0;
+                // Calculer la quantité totale
+                $cart_total_amount += $data['quantite'] * $data['details']['prix'];
+            }
+
+            // Calculer le nombre d'articles actifs dans le panier
+            $cartCount = count($cart);
         }
+
+        // Stocker les statistiques dans la session
+        session()->put('cart_count', $cartCount);
+        session()->put('cart_total_amount', $cart_total_amount);
 
         // Récupérer les catégories actives
         $categories = Categorie::where('statut_id', '1')
             ->orderBy('libelle', 'asc')
             ->get();
 
-        return view('panier.panier', compact('mypaniers', 'categories'));
+        return view('panier.panier', compact('cart', 'categories'));
     }
 
-
-    public function create()
+    public function removeFromCart($produitId, Request $request)
     {
-        //
-    }
+        $cart = Session::get('cart', []);
 
-    public function store(Request $request)
-    {
-        $panier = Panier::where('produit_id', $request->id)
-            ->where('user_id', Auth::user()->id)
-            ->first();
+        if (isset($cart[$produitId])) {
+            // Supprimer le produit de la session
+            unset($cart[$produitId]);
+            Session::put('cart', $cart);
 
-        if ($panier != null) {
-            $quantite = $panier->quantite + $request->quantite;
-            if ($panier->quantite > 1) {
-                $content = json_encode([
-                    'name' => 'Panier',
-                    'statut' => 'error',
-                    'message' => 'Le produit existe déjà dans le panier !',
-                ]);
-            } else {
-                $panier->update([
-                    'quantite' => $quantite,
-                    'state' => '1',
-                    'user_id' => Auth::user()->id,
-                    'produit_id' => $request->id,
-                ]);
-
-                $content = json_encode([
-                    'name' => 'Panier',
-                    'statut' => 'success',
-                    'message' => 'Le produit a été ajouté dans le panier !',
-                ]);
+            // Supprimer le produit de la base de données si l'utilisateur est connecté
+            if (Auth::check()) {
+                Panier::where('user_id', Auth::id())
+                    ->where('produit_id', $produitId)
+                    ->delete();
             }
-        } else {
-            $panier = Panier::create([
-                'quantite' => $request->quantite,
-                'state' => '1',
-                'user_id' => Auth::user()->id,
-                'produit_id' => $request->id,
-            ]);
 
-            $content = json_encode([
-                'name' => 'Panier',
-                'statut' => 'success',
-                'message' => 'Le produit a été ajouté dans le panier !',
+            // Recalculer le total
+            $total = 0;
+            foreach ($cart as $item) {
+                $total += $item['details']['prix'] * $item['quantite'];
+            }
+
+            // Retourner une réponse JSON
+            return response()->json([
+                'message' => 'Le produit a été retiré de votre panier avec succès !',
+                'success' => true,
+                'newTotal' => $total,
+                'cartCount' => count($cart) // Nombre d'articles dans le panier
             ]);
         }
 
-        session()->flash(
-            'session',
-            $content
-        );
-
-        return redirect()->route('panier.index');
+        return response()->json(['success' => false]);
     }
 
-    public function show(Panier $panier)
+    public function updateQuantity($produitId, Request $request)
     {
-        //
-    }
+        $cart = Session::get('cart', []);
+        $action = $request->input('action');
 
-    public function edit(Panier $panier)
-    {
-        //
-    }
+        if (isset($cart[$produitId])) {
+            if ($action === 'increment') {
+                $cart[$produitId]['quantite']++;
+            } elseif ($action === 'decrement' && $cart[$produitId]['quantite'] > 1) {
+                $cart[$produitId]['quantite']--;
+            }
 
-    public function update(Request $request)
-    {
-        Panier::find($request->panier_id)
-            ->update([
-                'quantite' => $request->quantite,
-                'state' => '1',
-                'user_id' => Auth::user()->id,
-                'produit_id' => $request->produit_id,
-            ]);
-        return back();
-    }
+            Session::put('cart', $cart);
 
-    public function destroy($id)
-    {
-        $panier = Panier::where('produit_id', $id)
-            ->where('user_id', Auth::user()->id)
-            ->first();
-
-        if ($panier) {
-            $panier->delete();
-
-            session()->flash('session', json_encode([
-                'name' => 'Panier',
-                'statut' => 'success',
-                'message' => 'Le produit ' . $panier->produit->nom . ' a été supprimé du panier !',
-            ]));
-        } else {
-            session()->flash('session', json_encode([
-                'name' => 'Panier',
-                'statut' => 'error',
-                'message' => 'Le produit n\'existe pas dans votre panier !',
-            ]));
-        }
-
-        return redirect()->route('panier.index');
-    }
-
-    public function updateQuantity(Request $request)
-    {
-        $panier = Panier::find($request->id);
-
-        if ($panier && $panier->user_id === Auth::id()) {
-            $panier->quantite = $request->quantite;
-            $panier->save();
-
-            // Calculer le total général du panier
-            $newTotal = Panier::where('user_id', Auth::user()->id)
-                ->get()
-                ->sum(fn($p) => $p->produit->prix * $p->quantite);
+            // Recalculer le total
+            $total = 0;
+            foreach ($cart as $item) {
+                $total += $item['details']['prix'] * $item['quantite'];
+            }
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Quantité mise à jour avec succès.',
-                'total' => $panier->quantite * $panier->produit->prix,
-                'new_total' => number_format($newTotal, 2),
+                'message' => 'Panier mis à jour avec succès !',
+                'success' => true,
+                'newQuantity' => $cart[$produitId]['quantite'],
+                'newTotal' => $total
             ]);
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Impossible de mettre à jour la quantité.',
-        ], 400);
+        return response()->json(['success' => false]);
     }
 
+    public function emptyCart()
+    {
+        Session::put('cart', []);
+
+        return back()->with('success','Le panier a été vidé avec succès !');
+    }
 }

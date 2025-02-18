@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Panier;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -35,6 +37,16 @@ class AuthenticatedSessionController extends Controller
                 Auth::logout();
                 return redirect()->route('login')->with(['account' => 'Votre compte est actuellement désactivé. Pour plus d\'informations ou pour réactiver votre compte, veuillez contacter notre support client.']);
             }
+
+            if (session('cart')) {
+                foreach (session('cart') as $produitId => $data) {
+                    Panier::updateOrCreate(
+                        ['user_id' => Auth::id(), 'produit_id' => $produitId, 'state' => 1],
+                        ['quantite' => DB::raw("quantite + {$data['quantite']}")]
+                    );
+                }
+            }
+
 
             // Regenerate session if the user is not disabled
             $request->session()->regenerate();
