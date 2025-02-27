@@ -148,24 +148,7 @@
                             </p>
                         </div>
                         <div class="col-12">
-                            <p class="mb-1">Quantité</p>
-                            <div class="d-flex">
-                                <div class="block-content-quantity d-flex align-items-center">
-                                    <button class="btn btnQte" onclick="updateQuantity(this, -1)">
-                                        <i class="bi bi-dash"></i>
-                                    </button>
-                                    <input type="text" id="quantityInput" class="form-control" value="1" minlength="1"
-                                        min="1">
-                                    <button class="btn btnQte" onclick="updateQuantity(this, 1)">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <a href="#" id="addToCartLink" class="btn btn-lg btn-primary w-100" onclick="addToCart()">
-                                Ajouter au panier
-                            </a>
+                            @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                         </div>
                         <div class="col-12">
                             <div class="accordion accordion-detail" id="accordionExample">
@@ -313,14 +296,11 @@
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-between">
                                         <div class="price">
                                             {{ $produit->prix }}$
                                         </div>
-                                        <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                            class="btn btn-primary btn-default ms-auto disabled opacity-0">
-                                            Ajouter au panier
-                                        </a>
+                                        @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                                     </div>
                                 </div>
                                 <div class="back">
@@ -342,11 +322,8 @@
                                             {{ $produit->prix }}$
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center ">
-                                        <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                            class="btn btn-primary btn-default">
-                                            Ajouter au panier
-                                        </a>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                                         <div class="d-flex block-rate align-items-center gap-2 ms-auto">
                                             <i class="bi bi-star-fill active"></i>
                                             <i class="bi bi-star-fill active"></i>
@@ -395,32 +372,4 @@
         </div>
     </div>
 </div>
-@endsection
-@section('scripts')
-<script>
-    function updateQuantity(button, change) {
-        const input = button.parentElement.querySelector('.form-control');
-        const newValue = Math.max(1, parseInt(input.value) + change); // Minimum value is 1
-        input.value = newValue;
-        updateCartLink(); // Mettre à jour le lien après chaque changement de quantité
-    }
-
-    function updateCartLink() {
-        const quantityInput = document.getElementById('quantityInput');
-        const addToCartLink = document.getElementById('addToCartLink');
-        const baseUrl = "{{ route('panier.store', ['id' => $produit->id, 'quantite' => 'QUANTITY_PLACEHOLDER']) }}";
-        const newUrl = baseUrl.replace('QUANTITY_PLACEHOLDER', quantityInput.value);
-        addToCartLink.href = newUrl;
-    }
-
-    function addToCart() {
-        updateCartLink(); // S'assurer que le lien est à jour avant la redirection
-        window.location.href = document.getElementById('addToCartLink').href;
-    }
-
-    // Initialiser le lien au chargement de la page
-    document.addEventListener('DOMContentLoaded', function () {
-        updateCartLink();
-    });
-</script>
 @endsection

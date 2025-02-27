@@ -45,10 +45,6 @@
                                     <div class="text-left">
                                         <h4>Produits en ligne</h4>
                                         <h1 class="mt-0 mt-sm-2 mt-lg-5">{{ $produits->count() }}</h1>
-                                        {{-- <p style="font-size: 14px;" class="mt-4"><span><i
-                                                    class="fas
-                                                        fa-arrow-up"></i>{{$produits->last()->created_at->format('d-m-Y') }}</span>
-                                            More visitors than usual </p> --}}
                                     </div>
                                 </div>
                             </div>
@@ -65,15 +61,7 @@
                                     <div class="text-left">
                                         <h4>Commandes en ligne</h4>
                                         <h1 class="mt-0 mt-sm-2 mt-lg-5">
-                                            {{ $commandes->where('statut_id', 2)->count() }}</h1>
-                                        <h5
-                                            class="mt-2 mt-sm-2 mt-lg-4 d-flex align-items-center justify-content-end mb-0 total">
-                                            <span>Total : </span><span class="ms-1"> {{ $commandes->count() }}</span>
-                                        </h5>
-                                        {{-- <p style="font-size: 14px;" class="mt-4"><span class=""><i
-                                                    class="fas fa-arrow-up"></i>
-                                                {{$produits->last()->created_at->format('d-m-Y') }}</span> More visitors
-                                            than usual </p> --}}
+                                            {{ $commandes->count() }}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -91,10 +79,6 @@
                                         <h4>Clients</h4>
                                         <h1 class="mt-0 mt-sm-2 mt-lg-5">{{ $clients->count() }}
                                         </h1>
-                                        {{-- <p style="font-size: 14px;" class="mt-4"><span class=""><i
-                                                    class="fas fa-arrow-up"></i>
-                                                {{$produits->last()->created_at->format('d-m-Y') }}</span> More visitors
-                                            than usual </p> --}}
                                     </div>
                                 </div>
                             </div>
@@ -189,15 +173,13 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">N° Commande</th>
                                             <th scope="col">Client</th>
-                                            <th scope="col">Société</th>
                                             <th scope="col">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
-                                        @foreach ($commandes->where('state', 0) as $key => $commande)
+                                        @foreach ($commandes->whereIn('status', ['pending', 'En attente', 'En cours', 'Annulée']) as $key => $commande)
                                             <tr>
                                                 <td>{{ $loop->index + 1 }}</td>
                                                 <td>{{ $commande->title }}</td>
@@ -210,10 +192,8 @@
                                                             {{-- <img src="{{asset('assets/admin/images/avatar.jpg')}}" alt="">
                                                             --}}
                                                         </div>
-                                                        {{ $commande->user->nom }}
+                                                        {{ "$commande->prenom_client $commande->nom_client" }}
                                                     </div>
-                                                </td>
-                                                <td class="date">{{ $commande->user->clients?->first()->societe }}
                                                 </td>
                                                 <td class="date">Le {{ $commande->created_at->format('d-m-Y') }}
                                                 </td>

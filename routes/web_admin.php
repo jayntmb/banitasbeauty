@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ProduitController;
+use App\Http\Controllers\Admin\CommandeController;
 use App\Http\Controllers\Admin\CategorieController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PartenaireController;
-use App\Http\Controllers\Admin\CommandeClientController;
-use App\Http\Controllers\ContentController;
 
 Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
@@ -51,9 +51,6 @@ Route::middleware('auth')->group(function () {
         Route::get('tableau-de-bord/partenaires/supprimer/{id}', [PartenaireController::class, 'deletelogo'])->name('admin.partenaires.logo.delete');
 
         Route::get('/search', [ProduitController::class, 'search'])->name('products.search');
-        // Route::get('tableau-de-bord/devis/jour', [PartenaireController::class, 'jourdevis'])->name('admin.devis.jour');
-        // Route::get('tableau-de-bord/devis/mois', [PartenaireController::class, 'moisdevis'])->name('admin.devis.mois');
-        // Route::get('tableau-de-bord/devis/annee', [PartenaireController::class, 'annedevis'])->name('admin.devis.annee');
         Route::get('tableau-de-bord/devis', [PartenaireController::class, 'devis'])->name('admin.devis');
         Route::get('tableau-de-bord/devis/link/{id}', [PartenaireController::class, 'devisLink'])->name('admin.devisLink');
         Route::post('tableau-de-bord/devis/ajouter', [PartenaireController::class, 'store'])->name('admin.devis.store');
@@ -62,8 +59,8 @@ Route::middleware('auth')->group(function () {
         Route::get('tableau-de-bord/devis/supprimer/{id}', [PartenaireController::class, 'destroy'])->name('admin.devis.delete');
         Route::post('tableau-de-bord/devis/sauvegarder', [PartenaireController::class, 'update'])->name('admin.devis.update');
 
-        Route::get('tableau-de-bord/client/commandes', [CommandeClientController::class, 'index'])->name('admin.commande.client');
-        Route::post('tableau-de-bord/client/commandes/livrer', [CommandeClientController::class, 'update'])->name('admin.commandeclient.update');
+        Route::get('tableau-de-bord/client/commandes', [CommandeController::class, 'index'])->name('admin.commande.client');
+        Route::put('tableau-de-bord/client/commandes/livrer', [CommandeController::class, 'update'])->name('admin.commande.update');
         Route::get(
             'tableau-de-bord/certifications',
             function () {

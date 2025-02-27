@@ -2,28 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
 use App\Models\Chat;
 use App\Models\User;
-use App\Models\Devis;
 use App\Models\Client;
 use App\Models\Message;
 use App\Models\Produit;
-use App\Models\Societe;
 use App\Models\Commande;
-use App\Models\SiteInfo;
-use App\Models\Categorie;
 use App\Models\Newsletter;
 use App\Models\Partenaire;
-use App\Models\DevisClient;
-use Illuminate\Http\Request;
-use App\Models\CommandeClient;
-use Illuminate\Support\Facades\DB;
-use Rainwater\Active\ActiveFacade;
 use Webklex\PHPIMAP\ClientManager;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
@@ -37,12 +26,12 @@ class DashboardController extends Controller
 
         // Récupération des entités avec des critères spécifiques
         $produits = Produit::where('statut_id', 1)->get();
-        $clients = User::where('statut_id', 1)->get();
+        $clients = User::where('statut_id', 1) // l'id 1 correspond au statut : active
+            ->where('role_id', 2) // l'id 2 correspond au role client
+            ->get();
         $partenaires = Partenaire::where('statut_id', 1)->get();
-        $societes = Societe::where('statut_id', 1)->get();
         $newsletters = Newsletter::where('statut_id', 1)->get();
-        $devis = DevisClient::latest()->get();
-        $commandes = CommandeClient::all();
+        $commandes = Commande::latest()->with('produits')->get();
         $user = User::whereHas('commandes')->latest()->get();
         $chats = Chat::where('statut_id', 1)->get();
 
@@ -54,16 +43,13 @@ class DashboardController extends Controller
             'online',
             'offline',
             'clients',
-            'partenaires',
-            'societes',
             'newsletters',
             'commandes',
             'chats',
-            'devis'
         ));
     }
 
-    function countOnlineUsers()
+    public function countOnlineUsers()
     {
         $onlineUsersCount = 0;
         $offlineUsersCount = 0;
@@ -71,7 +57,7 @@ class DashboardController extends Controller
         $users = User::all();
 
         foreach ($users as $user) {
-            if (Cache::has('user-is-online-' . $user->id)) {
+            if (Cache::has("user-is-online-$user->id")) {
                 $onlineUsersCount++;
             } else {
                 $offlineUsersCount++;

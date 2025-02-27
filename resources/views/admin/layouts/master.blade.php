@@ -70,7 +70,7 @@
     <script>
         const nvFichier = document.querySelectorAll('.file-input');
         nvFichier.forEach(element => {
-            element.addEventListener('change', function() {
+            element.addEventListener('change', function () {
                 const fichier = this.files[0];
                 const parent = $(this).parent();
                 if (fichier) {
@@ -83,7 +83,7 @@
                     }
                     const analyseur = new FileReader();
                     analyseur.readAsDataURL(fichier);
-                    analyseur.addEventListener('load', function() {
+                    analyseur.addEventListener('load', function () {
                         $(parent).addClass('selected')
                         $(parent).find('span').text(namefile);
                     })
@@ -134,7 +134,7 @@
         console.log(tableFichier1);
 
         tableFichier1.forEach(element => {
-            element.addEventListener('change', function() {
+            element.addEventListener('change', function () {
                 const fichiers = this.files;
                 const parent = $(this).parent();
                 const maxFiles = 5;
@@ -151,7 +151,7 @@
                         }
                         const analyseur = new FileReader();
                         analyseur.readAsDataURL(fichier);
-                        analyseur.addEventListener('load', function() {
+                        analyseur.addEventListener('load', function () {
                             if (filesUploaded <= maxFiles) {
                                 $(parent).removeClass('error');
                                 $(parent).addClass('selected');
@@ -209,11 +209,11 @@
     @stack('scripts')
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const searchInput = $('.search-input');
             const initialContent = $('.initialProductsContainer').html();
 
-            $('.search-input').on('keyup', function() {
+            $('.search-input').on('keyup', function () {
                 const value = $(this).val().trim();
 
                 if (value === '') {
@@ -227,7 +227,7 @@
                             value: value
                         },
                         dataType: "json",
-                        success: function(response) {
+                        success: function (response) {
                             const html = response.html;
 
                             if (html.trim() === '') {
@@ -247,7 +247,7 @@
                                 `);
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             console.error("Error fetching products:", error);
                         }
                     });
@@ -271,7 +271,7 @@
         var input_file_name = document.querySelector('.input-name-file')
 
         input_file_chat.forEach(element => {
-            element.addEventListener('change', function() {
+            element.addEventListener('change', function () {
                 $('.chat-box .block-file-upload').addClass('show')
                 const fichier = this.files[0];
                 if (fichier) {
@@ -284,7 +284,7 @@
                     if (fichier.type.match('image.*')) {
                         const analyseur = new FileReader();
                         analyseur.readAsDataURL(fichier);
-                        analyseur.addEventListener('load', function() {
+                        analyseur.addEventListener('load', function () {
                             $('.chat-box .img-upload').removeClass('d-none')
                             $(img_file).removeClass('d-none')
                             img_file.setAttribute('src', this.result);
@@ -304,7 +304,7 @@
                 }
             })
         });
-        $('.btn-close-block-file').click(function() {
+        $('.btn-close-block-file').click(function () {
             $('.chat-box .block-file-upload').removeClass('show')
             $(img_file).addClass('d-none')
             $(icon_file).addClass('d-none')
@@ -334,11 +334,11 @@
 
         }
 
-        $(".chat-box .block-coversation .form-control").keyup(function() {
+        $(".chat-box .block-coversation .form-control").keyup(function () {
 
             var value = $(this).val().toLowerCase()
 
-            $(".chat-box .block-all-message-sm .message-sm").each(function() {
+            $(".chat-box .block-all-message-sm .message-sm").each(function () {
                 var searc = $(this).text().toLowerCase();
                 if (searc.indexOf(value) > -1) {
                     $(this).show()
@@ -350,7 +350,7 @@
                     $(this).addClass('none')
                 }
                 if ($(".chat-box .block-all-message-sm .message-sm").length == $(
-                        ".chat-box .block-all-message-sm .message-sm.none").length) {
+                    ".chat-box .block-all-message-sm .message-sm.none").length) {
                     $('.block-empty').addClass('show')
                 } else {
                     $('.block-empty').removeClass('show')
@@ -358,11 +358,11 @@
             })
         })
 
-        $(".search-bar-table").keyup(function() {
+        $(".search-bar-table").keyup(function () {
 
             var value = $(this).val().toLowerCase()
 
-            $(".table-devis-prog tbody tr").each(function() {
+            $(".table-devis-prog tbody tr").each(function () {
                 var searc = $(this).text().toLowerCase();
                 if (searc.indexOf(value) > -1) {
                     $(this).show()
@@ -373,7 +373,7 @@
                     $(this).addClass('none')
                 }
                 if ($(".table-devis-prog tbody tr").length == $(
-                        ".table-devis-prog tbody tr.none").length) {
+                    ".table-devis-prog tbody tr.none").length) {
                     $('.block-empty-table').removeClass('d-none')
                 } else {
                     $('.block-empty-table').addClass('d-none')
@@ -382,14 +382,14 @@
         })
         var text_zone = document.querySelectorAll('.text-zone')
         text_zone.forEach(new_input_zone => {
-            $(new_input_zone).keyup(function(e) {
+            $(new_input_zone).keyup(function (e) {
                 $(this).css('height', '40px');
                 let scHeight = e.target.scrollHeight;
                 $(this).css('height', scHeight + 'px');
             })
 
         });
-        $('#submit').click(function() {
+        $('#submit').click(function () {
             var formData = new FormData();
             formData.append('file-image', $('#file-image')[0].files[0]);
 
@@ -399,7 +399,7 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                 },
                 // error: function(xhr, status, error) {

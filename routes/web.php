@@ -23,14 +23,17 @@ Route::middleware('userOnline')->group(function () {
     Route::get('/boutique', [ProduitController::class, 'index'])->name('boutique');
     Route::get('/astuceBeaute', function () {
         return view('astuceBeaute.astuceBeaute');
-    });
+    })->name('astucebeaute');
+
     Route::get('/entreprise', function () {
         $promoProduits = Produit::where('is_promo', true)->get();
         return view('entreprise.entreprise', compact('promoProduits'));
-    });
+    })->name('entreprise');
+    
     Route::get('/contact', function () {
         return view('contact.contact');
-    });
+    })->name('contact');
+    
     Route::get('/a-propos', [AboutController::class, 'index'])->name('about');
 
     // Product Routes
@@ -70,55 +73,27 @@ Route::middleware('userOnline')->group(function () {
         Route::get('/messages', [ChatController::class, 'index'])->name('notifications.index');
         Route::post('/messages/envoyer', [ChatController::class, 'store'])->name('notifications.store');
 
-        // Orders
-        Route::get('/mes-commandes/{tab?}', [CommandeController::class, 'index'])->name('commandes.index');
-        Route::get('/commande/delete/{id}', [CommandeController::class, 'destroy'])->name('commande.delete');
-        Route::get('/commande/store', [CommandeController::class, 'passercommande'])->name('commandes.store');
-        Route::get('/commande/client/delete/{id}', [CommandeController::class, 'deletecommande'])->name('commandes.client.delete');
-        Route::get('/commande/devis/delete/{id}', [CommandeController::class, 'deletedevis'])->name('commandes.devis.delete');
-        Route::get('/passer-commande/{id}', [CommandeController::class, 'passagecommande'])->name('commandes.passer');
-        Route::get('/commandes/client/{tab?}', [CommandeController::class, 'clientcommandes'])->name('commandes.client');
-        Route::get('/commande/valider', [CommandeController::class, 'valider'])->name('panier.valide');
-
-        // Cart Management
-        Route::get('/panier', [PanierController::class, 'index'])->name('panier.index');
-        Route::get('/panier/ajouter/{id}/{quantite}', [PanierController::class, 'store'])->name('panier.store');
-        Route::get('/panier/supprimer/{id}/{quantite}', [PanierController::class, 'diminue'])->name('panier.diminue');
-        Route::get('/panier/supprimer/{id}', [PanierController::class, 'destroy'])->name('panier.delete');
-        Route::post('/panier/update-quantity', [PanierController::class, 'updateQuantity'])->name('panier.updateQuantity');
-
         // Favorites
         Route::get('/favoris', [WishlistController::class, 'getUserWishlist'])->name('favorites');
         Route::post('/favoris/add', [WishlistController::class, 'add'])->name('wishlist.add');
         Route::delete('/favoris/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+        
+        Route::get('/mes-commandes/{tab?}', [CommandeController::class, 'index'])->name('commandes.index');
     });
+    // Orders
+    Route::get('/commande/delete/{id}', [CommandeController::class, 'destroy'])->name('commande.delete');
+    Route::get('/commande/store', [CommandeController::class, 'passercommande'])->name('commandes.store');
+    Route::get('/commande/client/delete/{id}', [CommandeController::class, 'deletecommande'])->name('commandes.client.delete');
+    Route::put('/commande/client/confirmation/{commande_id}', [CommandeController::class, 'confirmOrder'])->name('commande.client.confirm');
+    Route::get('/passer-commande/{id}', [CommandeController::class, 'passagecommande'])->name('commandes.passer');
+    Route::get('/commandes/client/{tab?}', [CommandeController::class, 'clientcommandes'])->name('commandes.client');
+    Route::get('/commande/valider', [CommandeController::class, 'valider'])->name('panier.valide');
 
-    // Identification
-    Route::get('/identification', [\App\Http\Controllers\pedro\indetificationController::class, 'index'])->name('identification');
-
-    // New Product
-    Route::get('/new-produit', function () {
-        return view('admin.pages.new-produit');
-    })->name('new-produit');
-
-    // API Routes
-    Route::get('/api/panier', function () {
-        if (auth()->check()) {
-            $cartItems = auth()->user()->panier()->with('produit')->get(); // Charge les produits associés
-            $cartCount = $cartItems->count();
-            $totalPrice = $cartItems->sum(function ($item) {
-                return $item->produit->prix * $item->quantite;
-            });
-
-            return response()->json([
-                'cartCount' => $cartCount,
-                'cartItems' => $cartItems,
-                'totalPrice' => $totalPrice,
-            ]);
-        }
-
-        return redirect()->route('login');
-    });
+    // Cart Management
+    Route::get('/panier', [PanierController::class, 'index'])->name('panier.index');
+    Route::get('vider/panier', [PanierController::class, 'emptyCart'])->name('empty.cart');
+    Route::post('/panier/supprimer/{produitId}', [PanierController::class, 'removeFromCart'])->name('remove.from.cart');
+    Route::post('/panier/update-quantity/{produitId}', [PanierController::class, 'updateQuantity'])->name('panier.updateQuantity');
 });
 
 // Include additional routes

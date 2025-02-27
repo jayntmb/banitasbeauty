@@ -17,11 +17,9 @@ class ProduitController extends Controller
     public function index()
     {
         $produits = Produit::orderBy('id', 'desc')->paginate(20);
-        $article = Produit::where('id', '0')->first();
         $categories = Categorie::where('statut_id', '1')->get();
-        $devis = Commande::where('statut_id', '1')->orderby('id', 'desc')->paginate(20);
 
-        return view('admin.pages.produits', compact('produits', 'categories', 'article', 'devis'));
+        return view('admin.pages.produits', compact('produits', 'categories'));
     }
 
     public function search(Request $request)

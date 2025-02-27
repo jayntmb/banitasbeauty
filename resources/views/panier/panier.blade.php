@@ -1,5 +1,5 @@
 @php
-    $showNavPage = true;
+$showNavPage = true;
 @endphp
 
 @extends('layouts.master')
@@ -11,64 +11,68 @@
                 <div class="card card-cart">
                     <div class="d-flex align-items-center mb-lg-3 mb-3">
                         <h1 class="text-lg mb-0">Panier</h1>
-                        <a href="#" class="ms-auto link">
+                        <a href="{{ route('empty.cart') }}" class="ms-auto link">
                             <span>Vider le panier</span>
                             <span>Vider le panier</span>
                             <span>Vider le panier</span>
                         </a>
                     </div>
                     <div class="row">
-                        @if ($mypaniers->isEmpty())
+                        <div class="card no-items-in-cart" style="display: none">
+                            <div class="row align-items-center">
+                                <div class="col-lg-4">
+                                    <p>Votre panier est vide pour l'instant !</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if (count($cart) == 0)
                             <div class="card card-product-cart">
                                 <div class="row align-items-center">
-                                    <div class="col-lg-4">
-                                        <h3>Panier vide !</h3>
+                                    <div class="col">
                                         <p>Votre panier est vide pour l'instant !</p>
                                     </div>
                                 </div>
                             </div>
                         @else
-                            @foreach ($mypaniers as $panier)
-                                <div class="col-12">
+                            @foreach ($cart as $item)
+                                <div class="col-12 cart-item" data-id="{{ $item['id'] }}">
                                     <div class="card item-cart">
                                         <div class="row g-lg-4 g-xl-5 g-2 align-items-center">
                                             <div class="col-lg-2 col-4">
-                                                @if ($panier->produit->first_image)
+                                                @if ($item['details']['first_image'])
                                                     <div class="img-article">
-                                                        <img src="{{ asset('storage/images/produits/' . $panier->produit->first_image) }}"
-                                                            class="w-100 h-100 object-fit-cover" alt="{{ $panier->produit->nom }}">
+                                                        <img src="{{ asset('storage/images/produits/' . $item['details']['first_image']) }}"
+                                                            class="w-100 h-100 object-fit-cover"
+                                                            alt="{{ $item['details']['nom'] }}">
                                                     </div>
                                                 @endif
                                             </div>
                                             <div class="col-lg-5 col-8">
                                                 <h3 class="name-article">
-                                                    {{ $panier->produit->nom ?? 'Nom du produit' }}
+                                                    {{ $item['details']['nom'] }}
                                                 </h3>
-                                                <div class="price">{{ $panier->produit->prix ?? '0.00' }}$</div>
+                                                <div class="price">{{ $item['details']['prix'] }}$</div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="d-flex">
-                                                    <div class="block-content-quantity d-flex align-items-center">
-                                                        <button class="btn btn-decrement" data-id="{{ $panier->id }}">
+                                                    <div class="d-flex align-items-center block-content-quantity sm">
+                                                        <button class="btn decrement-btn">
                                                             <i class="bi bi-dash"></i>
                                                         </button>
-                                                        <input type="text" class="form-control text-center quantity-input"
-                                                            value="{{ $panier->quantite }}" data-id="{{ $panier->id }}"
-                                                            readonly>
-                                                        <button class="btn btn-increment" data-id="{{ $panier->id }}">
+                                                        <input type="text" class="form-control quantity-input" minlength="1"
+                                                            value="{{ $item['quantite'] }}" data-id="{{ $item['id'] }}">
+                                                        <button class="btn increment-btn">
                                                             <i class="bi bi-plus"></i>
-                                                            <input type="hidden" name="token" value="{{ csrf_token() }}">
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
                                                 <div class="d-flex align-items-lg-center justify-content-lg-center">
-                                                    <a href="{{ route('panier.delete', [$panier->produit->id]) }}"
-                                                        class="btn-trash tooltip-hover" data-position-tooltip="right">
-                                                        <i class="bi bi-x-lg" onmouseover="this.style.color='red'"
-                                                            onmouseout="this.style.color=''"></i>
-                                                        <span class="tooltip-indicator sm">Retirer du panier</span>
+                                                    <a href="#" class="btn-trash ms-auto tooltip-hover remove-btn" data-position-tooltip="right"
+                                                        data-id="{{ $item['id'] }}">
+                                                        <i class="bi bi-trash"></i>
+                                                        <span class="tooltip-indicator sm">Retirer</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -84,7 +88,7 @@
                                             <div class="d-flex align-items-center justify-content-start gap-2">
                                                 <p class="paragraph mb-0">Total:</p>
                                                 <div class="price total-price lg">
-                                                    {{ $mypaniers->sum(fn($p) => $p->produit->prix * $p->quantite) }}$
+                                                    {{ session('cart_total_amount') }}$
                                                 </div>
                                             </div>
                                         </div>

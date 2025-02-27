@@ -7,8 +7,8 @@
         {{-- <input class="btn {{$show == 0 ? 'd-none':''}}" id="change" value="Change" wire:click='update({{$panier->id}})' /> --}}
     </div>
     <div class="justify-content-center mx-auto">
-        <p>Prix : {{$prix}} {{$devise}} </p>
-        <p>Total : {{$total}} {{$devise}}</p>
+        <p>Prix :  </p>
+        <p>Total : </p>
     </div>
 
 </div>

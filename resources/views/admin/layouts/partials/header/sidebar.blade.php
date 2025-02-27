@@ -25,7 +25,7 @@
             <li>
                 <a href="{{ route('admin.commande.client') }}"
                     class="{{ request()->is('administratiton/tableau-de-bord/client/commandes') ? 'active' : '' }} link"><i
-                        class="fas fa-shopping-cart"></i> <span class="title">Gestion de Commande</span></a>
+                        class="fas fa-shopping-cart"></i> <span class="title">Gestion des Commandes</span></a>
             </li>
             {{-- <li>
                     <a href="{{ route('admin.categories') }}" class="{{request()->is('administratiton/tableau-de-bord/categories') ? 'active' : '' }} link"><i class="fas fa-box"></i> <span class="title">Catégories</span></a>

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\User;
-class NewUserNotification extends Notification
+class NewUserNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $user;
@@ -42,8 +42,10 @@ class NewUserNotification extends Notification
     {
         return (new MailMessage)
                     ->line('Un nouveau client a été créé.')
-                    ->action('Voir le client'.$this->user->prenom.' '.$this->user->nom, route('admin.clients'))
-                    ->line('Vérifiez ses informations et activez-le!');
+                    ->line('Le client est : ' . $this->user->prenom . ' ' . $this->user->nom)
+                    ->line('Son adresse mail est : ' . $this->user->email)
+                    ->action('Voir les clients', route('admin.clients'))
+                    ->line('Vérifiez ses informations en consultant vos clients');
     }
 
     /**

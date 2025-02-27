@@ -1,5 +1,5 @@
 @php
-    $showNavPage = true;
+$showNavPage = true;
 @endphp
 
 @extends('layouts.master')
@@ -38,7 +38,7 @@
                 <div class="row g-lg-2 g-xl-4 g-3 products-section">
                     @foreach ($produits as $produit)
                                         @php
-                                            $averageRating = $produit->averageRating();
+    $averageRating = $produit->averageRating();
                                         @endphp
                                         <div class="col-lg-4 col-xl-3">
                                             <div class="card card-article">
@@ -66,14 +66,11 @@
                                                                 <i class="bi bi-star-fill {{ $i <= $averageRating ? 'active' : '' }}"></i>
                                                             @endfor
                                                         </div>
-                                                        <div class="d-flex align-items-center">
+                                                        <div class="d-flex align-items-center justify-content-between">
                                                             <div class="price">
                                                                 {{ $produit->prix }}$
                                                             </div>
-                                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                                                class="btn btn-primary btn-default ms-auto disabled opacity-0">
-                                                                Ajouter au panier
-                                                            </a>
+                                                            @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
                                                         </div>
                                                     </div>
                                                     <div class="back">
@@ -96,10 +93,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="d-flex align-items-center ">
-                                                            <a href="{{ route('panier.store', ['id' => $produit->id, 'quantite' => 1]) }}"
-                                                                class="btn btn-primary btn-default">
-                                                                Ajouter au panier
-                                                            </a>
+                                                            @livewire('add-to-cart-button', ['produitId' => $produit->id], key($produit->id))
+
                                                             <div class="d-flex block-rate align-items-center gap-2 ms-auto">
                                                                 @for ($i = 1; $i <= 5; $i++)
                                                                     <i class="bi bi-star-fill {{ $i <= $averageRating ? 'active' : '' }}"></i>
@@ -135,7 +130,7 @@
             <div class="col-lg-11">
                 <ul class="nav nav-tabs tab-indicator gap-lg-4 gap-2 mb-lg-4 mb-4" id="myTab" role="tablist">
                     @php
-                        $firstCategorie = $categories->first();
+$firstCategorie = $categories->first();
                     @endphp
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="tab-1" data-bs-toggle="tab" data-bs-target="#tab-pane-1"
@@ -166,14 +161,12 @@
                                 @foreach ($arrivages as $arrivage)
                                     <div class="card card-article">
                                         <div class="card-img">
-                                            <img src="{{ asset($arrivage->image) }}" alt="{{ $arrivage->nom }}">
+                                            <img src="{{ asset('storage/images/produits/' . $arrivage->first_image) }}"
+                                                alt="{{ $arrivage->nom }}">
                                         </div>
                                         <div class="content-text mt-2 mt-lg-2">
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ route('panier.store', ['id' => $arrivage->id, 'quantite' => 1]) }}"
-                                                    class="btn btn-primary btn-default">
-                                                    Ajouter au panier
-                                                </a>
+                                                @livewire('add-to-cart-button', ['produitId' => $arrivage->id], key($arrivage->id))
                                                 <a href="#" class="link ms-auto">
                                                     <span>Aperçu rapide</span>
                                                     <span>Aperçu rapide</span>
@@ -197,14 +190,13 @@
                                     @foreach ($arrivages as $arrivage)
                                         <div class="card card-article">
                                             <div class="card-img">
-                                                <img src="{{ asset($arrivage->image) }}" alt="{{ $arrivage->nom }}">
+                                                <img src="{{ asset('storage/images/produits/' . $arrivage->first_image) }}"
+                                                    alt="{{ $arrivage->nom }}">
                                             </div>
                                             <div class="content-text mt-2 mt-lg-2">
                                                 <div class="d-flex align-items-center">
-                                                    <a href="{{ route('panier.store', ['id' => $arrivage->id, 'quantite' => 1]) }}"
-                                                        class="btn btn-primary btn-default">
-                                                        Ajouter au panier
-                                                    </a>
+                                                    @livewire('add-to-cart-button', ['produitId' => $arrivage->id], key($arrivage->id))
+
                                                     <a href="#" class="link ms-auto">
                                                         <span>Aperçu rapide</span>
                                                         <span>Aperçu rapide</span>
@@ -223,36 +215,7 @@
         </div>
     </div>
 </div>
-<div class="block-promo-lg pb-0 reverse">
-    <div class="container-fluid px-lg-0">
-        <div class="row g-lg-0 g-3">
-            <div class="col-lg-6 order-2 order-lg-1">
-                <div class="content-text h-100 d-flex flex-column">
-                    <div class="my-auto">
-                        <h2 class="text-lg mb-lg-4 mb-3">
-                            Sleepy Eye Glow
-                        </h2>
-                        <p class="paragraph-lg mb-lg-5 mb-4">
-                            Sublimez votre regard avec <span>Sleepy Eye
-                                Glow </span> et redonnez vie à votre regard en une
-                            seule application avec des produits qui
-                            vont vous aider à illuminer votre regard.
-                        </p>
-                        <a href="#" class="btn btn-lg btn-primary mb-4">
-                            Ajouter au panier
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 pe-lg-0 order-1 order-lg-2">
-                <div class="card card-img">
-                    <img src="{{ asset('images/promotions/7.jpg') }}" alt="image de promotion"
-                        class="w-100 h-100 object-fit-cover">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@livewire('block-promo-display-in-shops-page')
 <div class="newsletter">
     <div class="container">
         <div class="col-lg-6">

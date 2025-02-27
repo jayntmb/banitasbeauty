@@ -23,11 +23,7 @@
                             <p class="paragraph-lg mb-lg-5 mb-4">
                                 {{ $block_promo_display->description }}
                             </p>
-                            <a href="{{ route('panier.store', ['id' => $block_promo_display->produit_id, 'quantite' => 1]) }}"
-                                class="btn btn-lg btn-primary" onmouseover="this.style.backgroundColor='white'"
-                                onmouseout="this.style.backgroundColor=''">
-                                Ajouter au panier
-                            </a>
+                            @livewire('add-to-cart-button', ['produitId' => $block_promo_display->produit_id], key($block_promo_display->produit_id))
                         </div>
                     </div>
                 </div>

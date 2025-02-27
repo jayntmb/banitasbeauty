@@ -12,6 +12,11 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/order-summary.css') }}">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+        integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
@@ -35,6 +40,7 @@
             background-color: red;
         }
     </style>
+    @stack('styles')
     @livewireStyles
 </head>
 
@@ -48,83 +54,12 @@
 
     {{-- MODAL --}}
 
-    @auth
-        {{-- OFFCANVAS PANIER --}}
-        <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="offcanvasCart"
-            aria-labelledby="offcanvasRightLabel">
-            <div class="offcanvas-header">
-                <h5 class="mb-0">VOTRE PANIER</h5>
-                <span style="font-size: 0.85em">(2 produits)</span>
-                <button type="button" class="btn-close tooltip-hover" data-bs-dismiss="offcanvas"
-                    data-position-tooltip="right" aria-label="Close">
-                    <i class="bi bi-x-lg"></i>
-                    <span class="tooltip-indicator sm">Fermer</span>
-                </button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="all-article-cart-sm">
-                    <div class="card card-article-card-sm">
-                        <div class="content-card">
-                            <div class="row g-2 g-lg-3">
-                                <div class="col-3">
-                                    <div class="img-article">
-                                        <img src="{{ asset('images/produits/5.jpg') }}" class="w-100"
-                                            alt="image d'article">
-                                    </div>
-                                </div>
-                                <div class="col-9">
-                                    <div class="info-article-cart d-flex flex-column gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="mb-0 name-article">
-                                                Glow lips 60 Capsules
-                                            </h6>
-                                            <span class="stock-status in-stock">En Stock <i class="bi bi-check"></i></span>
-                                            <a href="#" class="btn-trash ms-auto tooltip-hover"
-                                                data-position-tooltip="right">
-                                                <i class="bi bi-trash"></i>
-                                                <span class="tooltip-indicator sm">Retirer</span>
-                                            </a>
-                                        </div>
-                                        <div class="d-flex">
-                                            <div class="block-content-quantity sm d-flex align-items-center">
-                                                <button class="btn">
-                                                    <i class="bi bi-dash"></i>
-                                                </button>
-                                                <input type="text" class="form-control" value="1" minlength="1">
-                                                <button class="btn">
-                                                    <i class="bi bi-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="price">
-                                            8.00$
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="offcanvas-footer">
-                <div class="d-flex align-items-center block-total">
-                    <h6>Total:</h6>
-                    <div class="total-price ms-auto">
-                        8.00$
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <a href="/panier" class="btn w-50 btn-default d-flex align-items-center justify-content-center">
-                        Voir le panier
-                    </a>
-                    <a href="#" class="btn w-50 btn-default d-flex align-items-center justify-content-center">
-                        Check out
-                    </a>
-                </div>
-            </div>
+    @livewire('cart')
+    <div id="offcanvasAlert" class="offcanvas offcanvas-top" style="height: 75px" tabindex="-1">
+        <div class="offcanvas-body">
+            <!-- Content will be dynamically updated here -->
         </div>
-    @endauth
-
+    </div>
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -139,7 +74,7 @@
                     toast: true,
                     position: "top-end",
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 1000,
                     timerProgressBar: true,
                     didOpen: (toast) => {
                         toast.onmouseenter = Swal.stopTimer;
@@ -235,160 +170,120 @@
         });
     </script>
 
-    <!-- Script pour la mise a jour du panier de l'utilisateur -->
     <script>
-        loadCart();
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('cartUpdated', (event) => {
+                // Get the offcanvas element
+                const offcanvasElement = document.getElementById('offcanvasAlert');
+                const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
 
-        function loadCart() {
-            fetch('/api/panier')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erreur lors du chargement du panier');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    updateCartUI(data.cartCount, data.cartItems, data.totalPrice);
-                })
-                .catch(error => {
-                    console.error(error.message);
-                });
-        }
+                // Set the message or content for the offcanvas
+                const offcanvasBody = offcanvasElement.querySelector('.offcanvas-body');
+                offcanvasBody.textContent = 'Panier mis à jour avec succès !';
 
-        function updateCartUI(cartCount, cartItems, totalPrice) {
-            // Mettre à jour le nombre de produits
-            document.querySelector('#offcanvasCart .offcanvas-header span').textContent = `(${cartCount} produits)`;
+                // Show the offcanvas
+                offcanvas.show();
 
-            // Mettre à jour la liste des produits
-            const cartContainer = document.querySelector('.all-article-cart-sm');
-            cartContainer.innerHTML = ''; // Réinitialise la liste
-
-            cartItems.forEach(item => {
-                const productHTML = `
-            <div class="card card-article-card-sm">
-                <div class="content-card">
-                    <div class="row g-2 g-lg-3">
-                        <div class="col-3">
-                            <div class="img-article">
-                                <img src="storage/images/produits/${item.produit.first_image}" class="w-100" alt="${item.produit.nom}">
-                            </div>
-                        </div>
-                        <div class="col-9">
-                            <div class="info-article-cart d-flex flex-column gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h6 class="mb-0 name-article">${item.produit.nom}</h6>
-                                    <span class="stock-status ${item.produit.stock > 0 ? 'in-stock' : 'out-of-stock'}">
-                                        ${item.produit.stock > 0 ? 'En Stock' : 'Rupture de Stock'}
-                                        <i class="bi ${item.produit.stock > 0 ? 'bi-check' : 'bi-exclamation-triangle'}"></i>
-                                    </span>
-                                    <a href="/panier/supprimer/${item.produit.id}" class="btn-trash ms-auto tooltip-hover" data-id="${item.id}">
-                                        <i class="bi bi-trash"></i>
-                                        <span class="tooltip-indicator sm">Retirer</span>
-                                    </a>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="block-content-quantity sm d-flex align-items-center">
-                                        <button class="btn btn-decrement" data-id="${item.id}">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
-                                        <input type="number" class="form-control quantity-input" data-id="${item.id}" value="${item.quantite}" minlength="1">
-                                        <button class="btn btn-increment" data-id="${item.id}">
-                                            <i class="bi bi-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="price">${item.produit.prix}$</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-                cartContainer.insertAdjacentHTML('beforeend', productHTML);
+                setTimeout(() => {
+                    offcanvas.hide();
+                }, 800)
             });
-
-            // Mettre à jour le total
-            document.querySelector('.total-price').textContent = `${totalPrice.toFixed(2)}$`;
-            document.querySelector('.indice span').textContent = `${cartCount}`;
-        }
+        });
     </script>
 
-
+    <!-- Script pour la mise a jour du panier de l'utilisateur -->
     <script>
-        document.body.addEventListener('click', function(event) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            });
-
-            // Check if the clicked element is a btn-increment
-            if (event.target.closest('.btn-increment')) {
-                const button = event.target.closest('.btn-increment');
-                updateQuantity(button.dataset.id, 1);
-            }
-
-            // Check if the clicked element is a btn-decrement
-            if (event.target.closest('.btn-decrement')) {
-                const button = event.target.closest('.btn-decrement');
-                updateQuantity(button.dataset.id, -1);
-            }
-
-            function updateQuantity(id, change) {
-                const input = $(`.quantity-input[data-id="${id}"]`);
-                const newQuantity = parseInt(input.val()) + change;
-
-                if (newQuantity < 1) {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'La quantité ne peut pas être inférieure à 1.'
-                    });
-                    return;
-                }
-
-                // Requête AJAX
-                $.ajax({
-                    url: '/panier/update-quantity',
-                    method: 'POST',
-                    data: {
-                        id: id,
-                        quantite: newQuantity,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        if (data.status === 'success') {
-                            input.val(newQuantity); // Met à jour la valeur dans l'input
-                            Toast.fire({
-                                icon: 'success',
-                                title: data.message
-                            });
-
-                            const totalPriceElement = $('.total-price');
-                            if (totalPriceElement.length) {
-                                totalPriceElement.text(`${data.new_total}$`);
-                            }
-                        } else {
-                            Toast.fire({
-                                icon: 'error',
-                                title: data.message
-                            });
-                        }
-                    },
-                    error: function() {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Une erreur est survenue.'
-                        });
-                    }
-                });
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
         });
+
+        // Utilisation de la délégation d'événements
+        $(document).on('click', '.increment-btn', function () {
+            const input = $(this).parent().find('.quantity-input');
+            const produitId = input.data('id');
+            updateQuantity(produitId, 'increment');
+        });
+
+        $(document).on('click', '.decrement-btn', function () {
+            const input = $(this).parent().find('.quantity-input');
+            const produitId = input.data('id');
+            updateQuantity(produitId, 'decrement');
+        });
+
+        $(document).on('click', '.remove-btn', function (event) {
+            event.preventDefault();
+            const produitId = $(this).data('id');
+            removeFromCart(produitId);
+        });
+
+        function updateQuantity(produitId, action) {
+            $.ajax({
+                url: `/panier/update-quantity/${produitId}`,
+                type: 'POST',
+                data: {
+                    action: action,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        const input = $(`.quantity-input[data-id="${produitId}"]`);
+                        input.val(data.newQuantity);
+                        $('.total-price').text(data.newTotal + '$');
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+                        });
+                    }
+                }
+            });
+        }
+
+        function removeFromCart(produitId) {
+            $.ajax({
+                url: `/panier/supprimer/${produitId}`,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        // Supprimer l'élément du DOM
+                        const cartItem = $(`.cart-item[data-id="${produitId}"]`);
+                        if (cartItem.length) {
+                            cartItem.remove();
+                        }
+
+                        // Mettre à jour le total
+                        $('.total-price').text(data.newTotal + '$');
+
+                        // Mettre à jour le nombre d'articles dans le panier (si affiché)
+                        const cartCount = $('.cart-count');
+                        if (cartCount.length) {
+                            $('.icon-cart-count').text(data.cartCount);
+                            cartCount.text(data.cartCount + ' produit(s)');
+
+                            if(data.cartCount < 1){
+                                $('.item-cart').hide();
+                                $('.no-items-in-cart').show()
+                            }
+                        }
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+                        });
+                    }
+                }
+            });
+        }
     </script>
 
     <!-- Script pour le changement de style lors du scroll -->
@@ -519,7 +414,7 @@
         }
         }
     </script>
-    @livewireScripts
+
     @yield('scripts')
 </body>
 
