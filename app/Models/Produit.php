@@ -15,10 +15,6 @@ class Produit extends Model
         return $this->belongsTo(Statut::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
     public function categorie() {
         return $this->belongsTo(Categorie::class);
     }
@@ -32,7 +28,7 @@ class Produit extends Model
     }
 
     public function commandes() {
-        return $this->hasMany(Commande::class);
+        return $this->belongsToMany(Produit::class, 'commande_produits', 'produit_id', 'commande_id')->withPivot('quantite');
     }
 
     public function averageRating()

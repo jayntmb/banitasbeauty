@@ -68,8 +68,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::created(function ($user) {
-            $admins = User::where('role_id', 1)->get();
-            // dd($admins);
+            $admins = User::where('role_id', 2)->get();
             foreach ($admins as $admin) {
                 $admin->notify(new NewUserNotification($user));
             }
@@ -122,24 +121,9 @@ class User extends Authenticatable
         return $this->hasMany(Commande::class);
     }
 
-    public function devisclient()
-    {
-        return $this->hasMany(DevisClient::class);
-    }
-
-    public function commandeclient()
-    {
-        return $this->hasMany(CommandeClient::class);
-    }
-
     public function contacts()
     {
         return $this->hasMany(Contact::class);
-    }
-
-    public function lots()
-    {
-        return $this->hasMany(Lot::class);
     }
 
     public function panier()
@@ -150,11 +134,6 @@ class User extends Authenticatable
     public function partenaires()
     {
         return $this->hasMany(Partenaire::class);
-    }
-
-    public function pivotProduitTags()
-    {
-        return $this->hasMany(PivotProduitTag::class);
     }
 
     public function pivotProduitUsers()
@@ -172,10 +151,6 @@ class User extends Authenticatable
         return $this->hasMany(Societe::class);
     }
 
-    public function tags()
-    {
-        return $this->hasMany(Tag::class);
-    }
     public function sessions()
     {
         return $this->hasMany(Session::class);
