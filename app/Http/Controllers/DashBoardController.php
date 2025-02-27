@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CommandeClient;
-use App\Models\DevisClient;
 use App\Models\Panier;
 use App\Models\Categorie;
 use App\Models\Chat;
-use App\Models\Commande;
 use App\Models\SiteInfo;
 use App\Models\Message;
 use Illuminate\Http\Request;

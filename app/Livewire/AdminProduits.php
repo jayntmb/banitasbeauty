@@ -6,7 +6,6 @@ use App\Models\Produit;
 use Livewire\Component;
 use App\Models\Categorie;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Log;
 
 class AdminProduits extends Component
 {

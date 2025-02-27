@@ -31,13 +31,10 @@ class ContactController extends Controller
             'message' => 'Votre message a été envoyé avec succès !',
         ]);
 
-
-
         session()->flash(
             'session',
             $content
         );
-
 
         return back();
     }

@@ -27,79 +27,7 @@ class PartenaireController extends Controller
         $partenaires = Partenaire::all();
         return view('admin.pages.partenaires', compact('partenaires'));
     }
-    public function devis()
-    {
-        $users = User::whereHas('devisclient')->orderBy('id', 'desc')->get();
-        $userMonths = User::whereHas(
-            'commandes',
-            function ($query) {
-                $query->where('state', '1');
-            }
-        )->orderBy('id', 'desc')->get();
-        $devis = DevisClient::where('state', 1)->orderBy('created_at', 'desc')->get();
-        $devises = Devise::select('id', 'symbole')->get();
-        // $demandes = Commande::where('state', '1')->orderby('id', 'desc')->paginate(20);
-        // $article = Produit::where('id', '0')->first();
-        // $categories = Categorie::where('statut_id', '1')->get();
-        // $devis = Commande::where('state', '1')->orderby('id', 'asc')->paginate(20);
-        return view('admin.pages.devis', compact('userMonths', 'devis', 'devises', 'users'));
-    }
-    // public function jourdevis()
-    // {
-    //     $produits = Produit::orderBy('id', 'desc')->get();
-    //     // $users = User::orderBy('id', 'desc')->get();
-    //     // $users = User::withCount('commandes')->orderBy('commandes_count', 'desc')->get();
-    //     $userMonths = User::whereHas('commandes')->orderBy('created_at', 'desc')->get();
-    //     $users = User::with('commandes')->whereHas('commandes', function ($query) {
-    //         $query->where('state', '1')->whereDay('created_at', now())->orderBy('created_at', 'desc');
-    //     })->get();
 
-    //     $demandes = Commande::where('state', '1')->orderBy('created_at', 'desc')->paginate(20);
-    //     $article = Produit::where('id', '0')->first();
-    //     $categories = Categorie::where('statut_id', '1')->get();
-    //     $devis = Commande::where('state', '1')->orderby('id', 'asc')->paginate(20);
-    //     return view('admin.pages.devis', compact('produits', 'categories', 'userMonths', 'demandes', 'article', 'devis', 'users'));
-    // }
-    // public function moisdevis()
-    // {
-    //     $produits = Produit::orderBy('id', 'desc')->get();
-    //     // $users = User::orderBy('id', 'desc')->get();
-    //     // $users = User::withCount('commandes')->orderBy('commandes_count', 'desc')->get();
-    //     $userMonths = User::whereHas('commandes')->orderBy('created_at', 'desc')->get();
-    //     $users = User::whereHas(
-    //         'commandes',
-    //         function ($query) {
-    //             $query->where('state', '1')->whereMonth('updated_at', now())->orderBy('created_at', 'desc');
-    //             ;
-    //         }
-    //     )->orderby('nom', 'asc')->get();
-
-
-    //     $demandes = Commande::where('state', '1')->orderBy('created_at', 'desc')->paginate(20);
-    //     $article = Produit::where('id', '0')->first();
-    //     $categories = Categorie::where('statut_id', '1')->get();
-    //     $devis = Commande::where('state', '1')->orderby('id', 'asc')->paginate(20);
-    //     return view('admin.pages.devis', compact('produits', 'categories', 'userMonths', 'demandes', 'article', 'devis', 'users'));
-    // }
-    // public function annedevis()
-    // {
-    //     $produits = Produit::orderBy('id', 'desc')->get();
-    //     // $users = User::orderBy('id', 'desc')->get();
-    //     // $users = User::withCount('commandes')->orderBy('commandes_count', 'desc')->get();
-    //     $userMonths = User::whereHas('commandes')->orderBy('created_at', 'desc')->get();
-    //     $users = User::whereHas(
-    //         'commandes',
-    //         function ($query) {
-    //             $query->where('state', '1')->whereYear('created_at', now())->orderBy('created_at', 'desc');
-    //         }
-    //     )->orderBy('created_at', 'desc')->get();
-
-    //     $demandes = Commande::where('state', '1')->orderBy('created_at', 'desc')->paginate(20);
-    //     $article = Produit::where('id', '0')->first();
-    //     $categories = Categorie::where('statut_id', '1')->get();
-    //     $devis = Commande::where('state', '1')->orderby('id', 'asc')->paginate(20);
-    //     return view('admin.pages.devis', compact('produits', 'categories', 'userMonths', 'demandes', 'article', 'devis', 'users'));
-    // }
     public function devisLink($id)
     {
         $deletes = Commande::where('user_id', $id)->get();
@@ -156,10 +84,6 @@ class PartenaireController extends Controller
                     'statut_id' => '4',
                     'prix' => $request->price[$key],
                     'devise_id' => $request->devise_id[$key]
-                ]);
-
-                DevisClient::find($store->devis_client_id)->update([
-                    'state' => 1
                 ]);
             }
         }
