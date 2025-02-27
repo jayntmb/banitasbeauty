@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Welcome extends Notification
+class Welcome extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $user;
@@ -43,7 +43,7 @@ class Welcome extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Bienvenue sur PHARMANS '.$this->user->prenom.' '. $this->user->nom)
+                    ->line('Bienvenue sur Banitas Beauty '.$this->user->prenom.' '. $this->user->nom)
                     ->action('Découvrir la plateforme', route('home'))
                     ->line('Nous sommes ravis de vous compter parmi nos membres. Explorez notre plateforme et découvrez tout ce que nous avons à offrir !');
     }
