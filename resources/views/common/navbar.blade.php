@@ -12,16 +12,21 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav me-auto mb-0 mb-lg-0 gap-lg-4">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="/boutique">BOUTIQUE</a>
+                                    <a class="nav-link {{ request()->routeIs('boutique') ? 'active' : '' }}" href="/boutique">BOUTIQUE</a>
+                                </li>
+                                @auth
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('boutique') ? 'active' : '' }}" href="{{ route('commandes.index') }}">MES COMMANDES</a>
+                                    </li>
+                                @endauth
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('entreprise') ? 'active' : '' }}" href="/entreprise">ENTREPRISE</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/entreprise">ENTREPRISE</a>
+                                    <a class="nav-link {{ request()->routeIs('astucebeaute') ? 'active' : '' }}" href="/astuceBeaute">ASTUCES BEAUTÉ </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/astuceBeaute">ASTUCES BEAUTÉ </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/contact">CONTACT</a>
+                                    <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="/contact">CONTACT</a>
                                 </li>
                             </ul>
                         </div>
@@ -58,7 +63,8 @@
                                 @if (auth()->user()->role_id == 1)
                                     <a href="{{ route('admin.dashboard') }}" class="link-icon-nav">
                                         <svg viewBox="0 0 24 24" width="512" height="512">
-                                            <path d="m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm-4,21.164v-.164c0-2.206,1.794-4,4-4s4,1.794,4,4v.164c-1.226.537-2.578.836-4,.836s-2.774-.299-4-.836Zm9.925-1.113c-.456-2.859-2.939-5.051-5.925-5.051s-5.468,2.192-5.925,5.051c-2.47-1.823-4.075-4.753-4.075-8.051C2,6.486,6.486,2,12,2s10,4.486,10,10c0,3.298-1.605,6.228-4.075,8.051Zm-5.925-15.051c-2.206,0-4,1.794-4,4s1.794,4,4,4,4-1.794,4-4-1.794-4-4-4Zm0,6c-1.103,0-2-.897-2-2s.897-2,2-2,2,.897,2,2-.897,2-2,2Z">
+                                            <path
+                                                d="m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm-4,21.164v-.164c0-2.206,1.794-4,4-4s4,1.794,4,4v.164c-1.226.537-2.578.836-4,.836s-2.774-.299-4-.836Zm9.925-1.113c-.456-2.859-2.939-5.051-5.925-5.051s-5.468,2.192-5.925,5.051c-2.47-1.823-4.075-4.753-4.075-8.051C2,6.486,6.486,2,12,2s10,4.486,10,10c0,3.298-1.605,6.228-4.075,8.051Zm-5.925-15.051c-2.206,0-4,1.794-4,4s1.794,4,4,4,4-1.794,4-4-1.794-4-4-4Zm0,6c-1.103,0-2-.897-2-2s.897-2,2-2,2,.897,2,2-.897,2-2,2Z">
                                             </path>
                                         </svg>
                                     </a>

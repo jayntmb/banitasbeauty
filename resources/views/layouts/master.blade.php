@@ -12,6 +12,11 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/order-summary.css') }}">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+        integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
@@ -35,6 +40,7 @@
             background-color: red;
         }
     </style>
+    @stack('styles')
     @livewireStyles
 </head>
 
@@ -49,7 +55,6 @@
     {{-- MODAL --}}
 
     @livewire('cart')
-
     <div id="offcanvasAlert" class="offcanvas offcanvas-top" style="height: 75px" tabindex="-1">
         <div class="offcanvas-body">
             <!-- Content will be dynamically updated here -->
@@ -69,7 +74,7 @@
                     toast: true,
                     position: "top-end",
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 1000,
                     timerProgressBar: true,
                     didOpen: (toast) => {
                         toast.onmouseenter = Swal.stopTimer;
@@ -221,7 +226,7 @@
 
         function updateQuantity(produitId, action) {
             $.ajax({
-                url: `panier/update-quantity/${produitId}`,
+                url: `/panier/update-quantity/${produitId}`,
                 type: 'POST',
                 data: {
                     action: action,

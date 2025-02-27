@@ -67,7 +67,7 @@
             <a href="/panier" class="btn w-50 btn-default d-flex align-items-center justify-content-center">
                 Voir le panier
             </a>
-            <a href="#" class="btn w-50 btn-default d-flex align-items-center justify-content-center">
+            <a href="{{ route('panier.valide') }}" class="btn w-50 btn-default d-flex align-items-center justify-content-center">
                 Check out
             </a>
         </div>
