@@ -21,10 +21,7 @@ class CommandeController extends Controller
      */
     public function index()
     {
-        $pending_orders = Commande::whereIn('status', ['En attente', 'En cours', 'pending'])->get()->count();
-        $commandes = Commande::latest()->with('produits')->paginate(10);
-
-        return view('admin.pages.comandes', compact('commandes', 'pending_orders'));
+        return view('admin.pages.comandes');
     }
 
     public function update(Request $request)

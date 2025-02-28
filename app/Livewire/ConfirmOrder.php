@@ -66,6 +66,8 @@ class ConfirmOrder extends Component
                     'phone' => $this->user_data['phone'],
                     'statut_id' => 1
                 ]);
+
+                Auth::login($user);
             }
 
             $order = Commande::create([
@@ -104,12 +106,13 @@ class ConfirmOrder extends Component
 
     public function sendOrderEmail($order_details, $total_amount, $user_data)
     {
-        // Admin email or notifiable user
-        $adminEmail = 'tshipambavincent80@gmail.com';
+        $admins = User::where('role_id', 1)->get();
 
-        // Send the notification to the admin
-        Notification::route('mail', $adminEmail)
-            ->notify(new NewOrderNotification($order_details, $total_amount, $user_data));
+        foreach ($admins as $admin) {
+            // Send the notification to the admin
+            Notification::route('mail', $admin->email)
+                ->notify(new NewOrderNotification($order_details, $total_amount, $user_data));
+        }
     }
 
     public function render()

@@ -60,7 +60,6 @@ Route::middleware('auth')->group(function () {
         Route::post('tableau-de-bord/devis/sauvegarder', [PartenaireController::class, 'update'])->name('admin.devis.update');
 
         Route::get('tableau-de-bord/client/commandes', [CommandeController::class, 'index'])->name('admin.commande.client');
-        Route::put('tableau-de-bord/client/commandes/livrer', [CommandeController::class, 'update'])->name('admin.commande.update');
         Route::get(
             'tableau-de-bord/certifications',
             function () {
